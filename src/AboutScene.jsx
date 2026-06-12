@@ -3,7 +3,8 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
-const MODEL_ROOT = '/3D_glb_optimized'
+const BASE_URL = import.meta.env.BASE_URL
+const MODEL_ROOT = `${BASE_URL}3D_glb_optimized`
 
 const items = [
   { id: 'naklo', file: `${MODEL_ROOT}/cage_stabilisateur_flash.glb`, position: [-5.35, 3, 0], size: 2.85, rotationZ: -.04, hitbox: [3.2, 2.2, 1.2] },

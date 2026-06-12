@@ -1,16 +1,19 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react'
 
+const BASE_URL = import.meta.env.BASE_URL
+const asset = (path) => `${BASE_URL}${path.replace(/^\/+/, '')}`
+
 const AboutScene = lazy(() => import('./AboutScene'))
 const SimsAboutScene = lazy(() => import('./SimsAboutScene'))
 const EducationTeaScene = lazy(() => import('./EducationTeaScene'))
 
 const makeProjectMedia = (slug, imageCount, videoCount) => ({
   images: Array.from({ length: imageCount }, (_, index) => ({
-    src: `/projects/${slug}/gallery-${index + 1}.png`,
+    src: asset(`/projects/${slug}/gallery-${index + 1}.png`),
     label: `Photo ${String(index + 1).padStart(2, '0')}`,
   })),
   videos: Array.from({ length: videoCount }, (_, index) => ({
-    src: `/projects/${slug}/reel-${index + 1}.mp4`,
+    src: asset(`/projects/${slug}/reel-${index + 1}.mp4`),
     label: `Reel ${String(index + 1).padStart(2, '0')}`,
   })),
 })
@@ -27,7 +30,7 @@ const projectFiles = [
     period: 'Projet personnel · Mode',
     mission: 'Créer un univers cohérent autour de la modest fashion et produire des contenus capables de présenter les collections avec une identité forte.',
     services: ['Direction créative', 'Création de contenu', 'Social media', 'Campagnes vidéo'],
-    logo: '/projects/KSMODESTY/KS_logo.png',
+    logo: asset('/projects/KSMODESTY/KS_logo.png'),
     ...makeProjectMedia('ks-modesty', 15, 4),
   },
   {
@@ -41,7 +44,7 @@ const projectFiles = [
     period: 'Création de contenu · Food',
     mission: 'Découvrir des adresses, raconter une expérience culinaire et transformer chaque dégustation en contenu court, spontané et engageant.',
     services: ['Concept éditorial', 'Tournage', 'Montage Reels', 'Présentation caméra'],
-    logo: '/projects/naklo-b3da/NAKBLO_LOGO.png',
+    logo: asset('/projects/naklo-b3da/NAKBLO_LOGO.png'),
     ...makeProjectMedia('naklo-b3da', 10, 8),
   },
   {
@@ -55,7 +58,7 @@ const projectFiles = [
     period: 'Production · Événementiel',
     mission: 'Mettre en valeur les décors, les créations et les moments forts à travers une narration visuelle élégante pensée pour les réseaux sociaux.',
     services: ['Captation événementielle', 'Storytelling', 'Montage', 'Community management'],
-    logo: '/projects/RIWAYA/riwaya_logo.png',
+    logo: asset('/projects/RIWAYA/riwaya_logo.png'),
     ...makeProjectMedia('RIWAYA', 13, 7),
   },
 ]
@@ -446,9 +449,9 @@ function ProjectDesktop() {
 }
 
 const videos = [
-  { src: '/videos/video-01-web.mp4'},
-  { src: '/videos/video-02-web.mp4'},
-  { src: '/videos/video-03-web.mp4'},
+  { src: asset('/videos/video-01-web.mp4') },
+  { src: asset('/videos/video-02-web.mp4') },
+  { src: asset('/videos/video-03-web.mp4') },
 ]
 
 const aboutLabels = [
@@ -533,7 +536,7 @@ function VideoRail({ active }) {
               muted
               playsInline
               preload="metadata"
-              poster="/hero.png"
+              poster={asset("/hero.png")}
             >
               <source src={video.src} type="video/mp4" />
             </video>
@@ -831,7 +834,7 @@ export default function App() {
           <div className="printer-stage">
             <img
               className="printer-layer printer-layer-bottom"
-              src="/3D_glb_optimized/bas_bouche.png"
+              src={asset('/3D_glb_optimized/bas_bouche.png')}
               alt=""
               aria-hidden="true"
               decoding="async"
@@ -839,14 +842,14 @@ export default function App() {
             <img
               className="printer-layer printer-ticket"
               id="education-ticket"
-              src="/3D_glb_optimized/ticket.png"
+              src={asset('/3D_glb_optimized/ticket.png')}
               alt="Ticket présentant le parcours académique de Kawtar"
               aria-hidden={!ticketPrinted}
               decoding="async"
             />
             <img
               className="printer-layer printer-layer-top"
-              src="/3D_glb_optimized/haut_bouche.png"
+              src={asset('/3D_glb_optimized/haut_bouche.png')}
               alt=""
               aria-hidden="true"
               decoding="async"

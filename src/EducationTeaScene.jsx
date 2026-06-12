@@ -3,7 +3,8 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
-const TEA_MODEL = '/3D_glb_optimized/tea.glb'
+const BASE_URL = import.meta.env.BASE_URL
+const TEA_MODEL = `${BASE_URL}3D_glb_optimized/tea.glb`
 const textureSlots = [
   'map',
   'normalMap',

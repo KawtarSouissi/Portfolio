@@ -3,7 +3,8 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
-const MODEL_ROOT = '/3D_glb_optimized'
+const BASE_URL = import.meta.env.BASE_URL
+const MODEL_ROOT = `${BASE_URL}3D_glb_optimized`
 const EMERALD_FILE = `${MODEL_ROOT}/Sims_emrauld.glb`
 
 const traits = [
