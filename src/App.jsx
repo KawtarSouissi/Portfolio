@@ -155,7 +155,7 @@ function ProjectDesktop() {
   return (
     <section className="projects-section" id="projects" aria-label="Projets et expériences">
       <div className="projects-wallpaper" aria-hidden="true">
-        <img src="/macbook-projects-wallpaper.png" alt="" loading="lazy" decoding="async" />
+        <img src={asset("/macbook-projects-wallpaper.png")} alt="" loading="lazy" decoding="async" />
       </div>
 
       <header className="projects-menu">
