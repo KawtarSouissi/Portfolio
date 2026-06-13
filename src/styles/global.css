@@ -1448,6 +1448,11 @@ a {
   overflow-y: auto;
 }
 
+.info-copy {
+  display: flex;
+  flex-direction: column;
+}
+
 .case-study-window .window-bar {
   background: rgba(239, 238, 237, .82);
   backdrop-filter: blur(24px);
@@ -1683,6 +1688,68 @@ a {
   display: block;
   object-fit: cover;
 }
+
+.project-socials {
+  display: flex;
+  gap: 10px;
+  margin: 0 0 18px;
+  order: 2;
+}
+
+.project-image-grid {
+  order: 3;
+}
+
+.project-social {
+  min-width: 122px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid color-mix(in srgb, var(--project-color), transparent 72%);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--project-color), white 92%);
+  color: var(--project-color);
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.project-social span {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--project-color);
+  color: #fff;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.project-social span svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.project-social b {
+  font: 700 10px/1 -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.project-social:hover,
+.project-social:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 18px rgba(24, 14, 18, .12);
+  background: color-mix(in srgb, var(--project-color), white 88%);
+}
+
+.project-social:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--project-color), white 20%);
+  outline-offset: 2px;
+}
+
 
 .case-study-window .carousel-caption {
   padding: 14px 3px 7px;

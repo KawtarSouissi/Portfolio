@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useRef, useState } from 'react'
+﻿import React, { lazy, Suspense, useEffect, useRef, useState } from 'react'
 
 const BASE_URL = import.meta.env.BASE_URL
 const asset = (path) => `${BASE_URL}${path.replace(/^\/+/, '')}`
@@ -26,11 +26,16 @@ const projectFiles = [
     color: '#9f1734',
     accent: '#f1b6c5',
     role: 'Projet de marque',
-    summary: 'Direction créative, contenu et identité digitale.',
-    period: 'Projet personnel · Mode',
-    mission: 'Créer un univers cohérent autour de la modest fashion et produire des contenus capables de présenter les collections avec une identité forte.',
-    services: ['Direction créative', 'Création de contenu', 'Social media', 'Campagnes vidéo'],
+    summary: 'Direction crÃ©ative, contenu et identitÃ© digitale.',
+    period: 'Projet personnel Â· Mode',
+    mission: 'CrÃ©er un univers cohÃ©rent autour de la modest fashion et produire des contenus capables de prÃ©senter les collections avec une identitÃ© forte.',
+    services: ['Direction crÃ©ative', 'CrÃ©ation de contenu', 'Social media', 'Campagnes vidÃ©o'],
     logo: asset('/projects/KSMODESTY/KS_logo.png'),
+    social: {
+      instagram: 'https://www.instagram.com/ksmodesty/',
+      tiktok: 'https://www.tiktok.com/@ksmodesty',
+      handle: '@ksmodesty',
+    },
     ...makeProjectMedia('ks-modesty', 15, 4),
   },
   {
@@ -39,12 +44,17 @@ const projectFiles = [
     folder: 'NAKLO_B3DA',
     color: '#315c4c',
     accent: '#cbd9b6',
-    role: 'Création de contenu',
+    role: 'CrÃ©ation de contenu',
     summary: 'Production visuelle et contenus food actuels.',
-    period: 'Création de contenu · Food',
-    mission: 'Découvrir des adresses, raconter une expérience culinaire et transformer chaque dégustation en contenu court, spontané et engageant.',
-    services: ['Concept éditorial', 'Tournage', 'Montage Reels', 'Présentation caméra'],
+    period: 'CrÃ©ation de contenu Â· Food',
+    mission: 'DÃ©couvrir des adresses, raconter une expÃ©rience culinaire et transformer chaque dÃ©gustation en contenu court, spontanÃ© et engageant.',
+    services: ['Concept Ã©ditorial', 'Tournage', 'Montage Reels', 'PrÃ©sentation camÃ©ra'],
     logo: asset('/projects/naklo-b3da/NAKBLO_LOGO.png'),
+    social: {
+      instagram: 'https://www.instagram.com/naklob3da/',
+      tiktok: 'https://www.tiktok.com/@naklob3da',
+      handle: '@naklob3da',
+    },
     ...makeProjectMedia('naklo-b3da', 10, 8),
   },
   {
@@ -53,12 +63,17 @@ const projectFiles = [
     folder: 'RIWAYA',
     color: '#5d397f',
     accent: '#d2bde4',
-    role: 'Production événementielle',
-    summary: 'Captation, storytelling et contenus événementiels.',
-    period: 'Production · Événementiel',
-    mission: 'Mettre en valeur les décors, les créations et les moments forts à travers une narration visuelle élégante pensée pour les réseaux sociaux.',
-    services: ['Captation événementielle', 'Storytelling', 'Montage', 'Community management'],
+    role: 'Production Ã©vÃ©nementielle',
+    summary: 'Captation, storytelling et contenus Ã©vÃ©nementiels.',
+    period: 'Production Â· Ã‰vÃ©nementiel',
+    mission: 'Mettre en valeur les dÃ©cors, les crÃ©ations et les moments forts Ã  travers une narration visuelle Ã©lÃ©gante pensÃ©e pour les rÃ©seaux sociaux.',
+    services: ['Captation Ã©vÃ©nementielle', 'Storytelling', 'Montage', 'Community management'],
     logo: asset('/projects/RIWAYA/riwaya_logo.png'),
+    social: {
+      instagram: 'https://www.instagram.com/riwaya_prod/',
+      tiktok: 'https://www.tiktok.com/@riwaya_prod',
+      handle: '@riwaya_prod',
+    },
     ...makeProjectMedia('RIWAYA', 13, 7),
   },
 ]
@@ -87,6 +102,7 @@ function ProjectDesktop() {
   const dragState = useRef(null)
   const [cvOpen, setCvOpen] = useState(false)
   const [letterOpen, setLetterOpen] = useState(false)
+  const [socialWindows] = useState([])
 
   useEffect(() => {
     if (!openFolders.length) return undefined
@@ -119,6 +135,15 @@ function ProjectDesktop() {
   const closeFolder = (id) => {
     setOpenFolders((current) => current.filter((item) => item !== id))
   }
+
+  const openSocialWindow = (projectId, platform) => {
+    const project = projectFiles.find((item) => item.id === projectId)
+    const url = project?.social?.[platform]
+    if (!url) return
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
+
+  const closeSocialWindow = () => {}
 
   const moveInfoSlide = (id, direction) => {
     const project = projectFiles.find((item) => item.id === id)
@@ -170,26 +195,26 @@ function ProjectDesktop() {
   }
 
   return (
-    <section className="projects-section" id="projects" aria-label="Projets et expériences">
+    <section className="projects-section" id="projects" aria-label="Projets et expÃ©riences">
       <div className="projects-wallpaper" aria-hidden="true">
         <img src={asset("/macbook-projects-wallpaper.png")} alt="" loading="lazy" decoding="async" />
       </div>
 
       <header className="projects-menu">
         <div className="mac-menu-left">
-          <strong aria-label="Apple">●</strong>
+          <strong aria-label="Apple">â—</strong>
           <b>Finder</b>
           <span>Fichier</span>
-          <span>Édition</span>
-          <span>Présentation</span>
+          <span>Ã‰dition</span>
+          <span>PrÃ©sentation</span>
           <span>Aller</span>
-          <span>Fenêtre</span>
+          <span>FenÃªtre</span>
           <span>Aide</span>
         </div>
         <div className="mac-menu-right">
-          <span>⌁</span>
-          <span>⌕</span>
-          <span>▰</span>
+          <span>âŒ</span>
+          <span>âŒ•</span>
+          <span>â–°</span>
           <time>Ven. 12 juin&nbsp;&nbsp;20:19</time>
         </div>
       </header>
@@ -223,9 +248,9 @@ function ProjectDesktop() {
           <span>Notes</span>
           <time>20:19</time>
         </header>
-        <strong>À ne pas oublier ✦</strong>
-        <p>Créer avec intention,<br />raconter avec émotion<br />et toujours oser.</p>
-        <small>— Kawtar</small>
+        <strong>Ã€ ne pas oublier âœ¦</strong>
+        <p>CrÃ©er avec intention,<br />raconter avec Ã©motion<br />et toujours oser.</p>
+        <small>â€” Kawtar</small>
       </aside>
 
       <button className="desktop-cv-file" type="button" onClick={() => setCvOpen(true)}>
@@ -258,7 +283,7 @@ function ProjectDesktop() {
               <i />
               <i />
             </div>
-            <span>KAWTAR_CV.pdf — Aperçu</span>
+            <span>KAWTAR_CV.pdf â€” AperÃ§u</span>
           </div>
           <article className="cv-preview">
             <object
@@ -282,7 +307,7 @@ function ProjectDesktop() {
               <i />
               <i />
             </div>
-            <span>Lettre de motivation Kawtar Souissi.pdf — Aperçu</span>
+            <span>Lettre de motivation Kawtar Souissi.pdf â€” AperÃ§u</span>
           </div>
           <article className="cv-preview">
             <object
@@ -323,7 +348,7 @@ function ProjectDesktop() {
               <i />
               <i />
             </div>
-            <span>{project.folder}.EXE — Information about: {project.name}</span>
+            <span>{project.folder}.EXE â€” Information about: {project.name}</span>
           </div>
           {project.id === 'naklo-b3da' ? (
             <div className="naklo-case-decoration" aria-hidden="true">
@@ -348,11 +373,11 @@ function ProjectDesktop() {
                   <img className="naklo-info-logo" src={asset("/projects/naklo-b3da/NAKBLO_LOGO.png")} alt="Naklo B3da w i7en Lah" />
                   <section className="naklo-info-text">
                     <h4>ORIGINE <em>de notre nom</em></h4>
-                    <p>J’AI DÉCIDÉ DE NOMMER MON COMPTE “NAKLO B3DA W I7EN LAH”, UNE EXPRESSION TIRÉE TOUT DROIT DU DIALECTE MAROCAIN, ELLE SIGNIFIE “MANGEONS D’ABORD, DIEU S’OCCUPERA DU RESTE”. C’EST UNE EXPRESSION CÉLÈBRE DANS LA CULTURE MAROCAINE, ELLE PERMETS DE RECENTRER LE SUJET SUR LE PLUS IMPORTANT; LA SIMPLICITÉ DE PARTAGER UN MOMENT DE CONVIVIALITÉ AUTOUR D’UN BON PLAT, ET DE LAISSER LE RESTE AUX MAINS DE DIEU.</p>
+                    <p>Jâ€™AI DÃ‰CIDÃ‰ DE NOMMER MON COMPTE â€œNAKLO B3DA W I7EN LAHâ€, UNE EXPRESSION TIRÃ‰E TOUT DROIT DU DIALECTE MAROCAIN, ELLE SIGNIFIE â€œMANGEONS Dâ€™ABORD, DIEU Sâ€™OCCUPERA DU RESTEâ€. Câ€™EST UNE EXPRESSION CÃ‰LÃˆBRE DANS LA CULTURE MAROCAINE, ELLE PERMETS DE RECENTRER LE SUJET SUR LE PLUS IMPORTANT; LA SIMPLICITÃ‰ DE PARTAGER UN MOMENT DE CONVIVIALITÃ‰ AUTOUR Dâ€™UN BON PLAT, ET DE LAISSER LE RESTE AUX MAINS DE DIEU.</p>
                   </section>
                   <section className="naklo-info-text">
                     <h4>CONCEPT &amp; OBJECTIF <em>de ce projet</em></h4>
-                    <p>ÉTANT FRANCO-MAROCAINE ET GRANDE ADEPTE DE TOUT CE QUI EST RELIÉ DE PRÈS OU DE LOIN À LA NOURRITURE, JE ME DEVAIS DE CRÉER UN CONCEPT QUI PERMETTRAIS À MA COMMUNAUTÉ DE DÉCOUVRIR DE NOUVELLES SPÉCIALITÉS CULINAIRES ET ACTIVITÉS EXISTANTES EN FRANCE ET AU MAROC. OBJECTIF ? PARTAGER UN UNIVERS QUI ME PASSIONNE; PROMOUVOIR L’INCLUSIVITÉ ET L’ACCESSIBILITÉ À TRAVERS LA DÉCOUVERTE DE LIEUX QUI ONT POUR CIBLES TOUT TYPE DE PROFIL CLIENTS. MA SŒUR M’A JOINT DANS CE MAGNIFIQUE PROJET : BIENVENUS DANS NOTRE UNIVERS.</p>
+                    <p>Ã‰TANT FRANCO-MAROCAINE ET GRANDE ADEPTE DE TOUT CE QUI EST RELIÃ‰ DE PRÃˆS OU DE LOIN Ã€ LA NOURRITURE, JE ME DEVAIS DE CRÃ‰ER UN CONCEPT QUI PERMETTRAIS Ã€ MA COMMUNAUTÃ‰ DE DÃ‰COUVRIR DE NOUVELLES SPÃ‰CIALITÃ‰S CULINAIRES ET ACTIVITÃ‰S EXISTANTES EN FRANCE ET AU MAROC. OBJECTIF ? PARTAGER UN UNIVERS QUI ME PASSIONNE; PROMOUVOIR Lâ€™INCLUSIVITÃ‰ ET Lâ€™ACCESSIBILITÃ‰ Ã€ TRAVERS LA DÃ‰COUVERTE DE LIEUX QUI ONT POUR CIBLES TOUT TYPE DE PROFIL CLIENTS. MA SÅ’UR Mâ€™A JOINT DANS CE MAGNIFIQUE PROJET : BIENVENUS DANS NOTRE UNIVERS.</p>
                   </section>
                 </>
               ) : project.id === 'ks-modesty' ? (
@@ -360,19 +385,19 @@ function ProjectDesktop() {
                   <img className="ks-info-logo" src={asset("/projects/KSMODESTY/KS_logo.png")} alt="KS Modesty" />
                   <section className="ks-info-text">
                     <h4>CONCEPT &amp; OBJECTIF <em>de ce projet</em></h4>
-                    <p>J’AI DÉVELOPPÉ UN PROJET QUI ME RESSEMBLE ET QUI RÉPONDAIT À UN RÉEL BESOIN SUR LE MARCHÉ. KS MODESTY EST UNE MARQUE SPÉCIALISÉE DANS LES VOILES D’EXCEPTION, ET SE DISTINGUE PAR UNE APPROCHE NOVATRICE, LE MESSAGE QUE JE SOUHAITE PASSER EST QU’UNE FEMME QUI FAIS LE CHOIX VESTIMENTAIRE DU VOILE, NE DOIT PAS SE PERDRE DANS LES ATTENTES DE LA SOCIÉTÉ À CE QU’ELLE SE VÊTISSE DE MANIÈRE MONOTONE ET SANS EXTRAVAGANCE. BREF J’EN AI DIS ASSEZ.</p>
+                    <p>Jâ€™AI DÃ‰VELOPPÃ‰ UN PROJET QUI ME RESSEMBLE ET QUI RÃ‰PONDAIT Ã€ UN RÃ‰EL BESOIN SUR LE MARCHÃ‰. KS MODESTY EST UNE MARQUE SPÃ‰CIALISÃ‰E DANS LES VOILES Dâ€™EXCEPTION, ET SE DISTINGUE PAR UNE APPROCHE NOVATRICE, LE MESSAGE QUE JE SOUHAITE PASSER EST QUâ€™UNE FEMME QUI FAIS LE CHOIX VESTIMENTAIRE DU VOILE, NE DOIT PAS SE PERDRE DANS LES ATTENTES DE LA SOCIÃ‰TÃ‰ Ã€ CE QUâ€™ELLE SE VÃŠTISSE DE MANIÃˆRE MONOTONE ET SANS EXTRAVAGANCE. BREF Jâ€™EN AI DIS ASSEZ.</p>
                   </section>
                 </>
               ) : project.id === 'riwaya' ? (
                 <>
-                  <img className="riwaya-info-logo" src={asset("/projects/RIWAYA/riwaya_logo.png")} alt="Riwāya" />
+                  <img className="riwaya-info-logo" src={asset("/projects/RIWAYA/riwaya_logo.png")} alt="RiwÄya" />
                   <section className="riwaya-info-text">
                     <h4>ORIGINE <em>de notre nom</em></h4>
-                    <p>Riwaya signifie « histoire » ou « récit » en arabe. Un nom qui reflète parfaitement ma vision de la création de contenu événementiel : chaque événement raconte une histoire unique. Derrière chaque regard, chaque détail, il y a un récit qui mérite d’être capturé et transmis.</p>
+                    <p>Riwaya signifie Â« histoire Â» ou Â« rÃ©cit Â» en arabe. Un nom qui reflÃ¨te parfaitement ma vision de la crÃ©ation de contenu Ã©vÃ©nementiel : chaque Ã©vÃ©nement raconte une histoire unique. DerriÃ¨re chaque regard, chaque dÃ©tail, il y a un rÃ©cit qui mÃ©rite dâ€™Ãªtre capturÃ© et transmis.</p>
                   </section>
                   <section className="riwaya-info-text">
                     <h4>CONCEPT &amp; OBJECTIF <em>de ce projet</em></h4>
-                    <p>J’AI LANCÉ CE COMPTE DE CRÉATION DE CONTENU ÉVÉNEMENTIEL PARCE QU’IL RÉUNIT TOUT CE QUI ME PASSIONNE : L’ESTHÉTIQUE, LE SENS DU DÉTAIL, LA CRÉATION DE CONTENU ET SURTOUT L’ÉMOTION HUMAINE. J’AIME CAPTURER CES INSTANTS QUI NE SE REPRODUIRONT JAMAIS DEUX FOIS, METTRE EN LUMIÈRE LA BEAUTÉ D’UN MOMENT, D’UN LIEU OU D’UNE HISTOIRE À TRAVERS MON REGARD. CHAQUE ÉVÉNEMENT EST UNE OCCASION DE RACONTER QUELQUE CHOSE D’UNIQUE, DE TRANSFORMER DES SOUVENIRS EN IMAGES ET DE FAIRE RESSENTIR AUX AUTRES UNE ATMOSPHÈRE BIEN PRÉCISE.</p>
+                    <p>Jâ€™AI LANCÃ‰ CE COMPTE DE CRÃ‰ATION DE CONTENU Ã‰VÃ‰NEMENTIEL PARCE QUâ€™IL RÃ‰UNIT TOUT CE QUI ME PASSIONNE : Lâ€™ESTHÃ‰TIQUE, LE SENS DU DÃ‰TAIL, LA CRÃ‰ATION DE CONTENU ET SURTOUT Lâ€™Ã‰MOTION HUMAINE. Jâ€™AIME CAPTURER CES INSTANTS QUI NE SE REPRODUIRONT JAMAIS DEUX FOIS, METTRE EN LUMIÃˆRE LA BEAUTÃ‰ Dâ€™UN MOMENT, Dâ€™UN LIEU OU Dâ€™UNE HISTOIRE Ã€ TRAVERS MON REGARD. CHAQUE Ã‰VÃ‰NEMENT EST UNE OCCASION DE RACONTER QUELQUE CHOSE Dâ€™UNIQUE, DE TRANSFORMER DES SOUVENIRS EN IMAGES ET DE FAIRE RESSENTIR AUX AUTRES UNE ATMOSPHÃˆRE BIEN PRÃ‰CISE.</p>
                   </section>
                 </>
               ) : (
@@ -382,10 +407,10 @@ function ProjectDesktop() {
               <p className="case-study-period">{project.period}</p>
               <p className="case-study-mission">{project.mission}</p>
               <dl>
-                <dt>Rôle</dt>
+                <dt>RÃ´le</dt>
                 <dd>{project.role}</dd>
-                <dt>Médias</dt>
-                <dd>{project.videos.length} vidéos · {project.images.length} images</dd>
+                <dt>MÃ©dias</dt>
+                <dd>{project.videos.length} vidÃ©os Â· {project.images.length} images</dd>
               </dl>
               <div className="case-study-services">
                 {project.services.map((service) => <span key={service}>{service}</span>)}
@@ -395,9 +420,39 @@ function ProjectDesktop() {
               <div className="project-image-grid" aria-label={`Galerie photo ${project.name}`}>
                 {project.images.map((image) => (
                   <figure key={image.src}>
-                    <img src={image.src} alt={`${project.name} — ${image.label}`} loading="lazy" decoding="async" />
+                    <img src={image.src} alt={`${project.name} â€” ${image.label}`} loading="lazy" decoding="async" />
                   </figure>
                 ))}
+              </div>
+              <div className="project-socials" aria-label={`RÃ©seaux sociaux ${project.name}`}>
+                <button
+                  type="button"
+                  className="project-social project-social-instagram"
+                  onClick={() => openSocialWindow(project.id, 'instagram')}
+                  aria-label={`Ouvrir la fenÃªtre Instagram de ${project.name}`}
+                >
+                  <span aria-hidden="true">
+                    <svg viewBox="0 0 24 24" role="img" focusable="false">
+                      <rect x="3.25" y="3.25" width="17.5" height="17.5" rx="5.25" ry="5.25" fill="none" stroke="currentColor" strokeWidth="1.9" />
+                      <circle cx="12" cy="12" r="4.15" fill="none" stroke="currentColor" strokeWidth="1.9" />
+                      <circle cx="17.45" cy="6.55" r="1.2" fill="currentColor" />
+                    </svg>
+                  </span>
+                  <b>Instagram</b>
+                </button>
+                <button
+                  type="button"
+                  className="project-social project-social-tiktok"
+                  onClick={() => openSocialWindow(project.id, 'tiktok')}
+                  aria-label={`Ouvrir la fenÃªtre TikTok de ${project.name}`}
+                >
+                  <span aria-hidden="true">
+                    <svg viewBox="0 0 24 24" role="img" focusable="false">
+                      <path fill="currentColor" d="M14.72 3c.36 1.97 1.56 3.54 3.82 4.03v2.63a7.18 7.18 0 0 1-3.7-1.09l-.02 6.18a5.58 5.58 0 1 1-5.57-5.57c.34 0 .64.03.93.09v2.77a2.85 2.85 0 1 0 1.92 2.71V3h2.62Z" />
+                    </svg>
+                  </span>
+                  <b>TikTok</b>
+                </button>
               </div>
             </div>
             <div className="info-carousel">
@@ -423,21 +478,21 @@ function ProjectDesktop() {
                   <span>MOTION</span>
                   <strong>{currentSlide?.label}</strong>
                 </div>
-                <button type="button" className="carousel-arrow carousel-prev" onClick={() => moveInfoSlide(project.id, -1)} aria-label="Média précédent">‹</button>
-                <button type="button" className="carousel-arrow carousel-next" onClick={() => moveInfoSlide(project.id, 1)} aria-label="Média suivant">›</button>
+                <button type="button" className="carousel-arrow carousel-prev" onClick={() => moveInfoSlide(project.id, -1)} aria-label="MÃ©dia prÃ©cÃ©dent">â€¹</button>
+                <button type="button" className="carousel-arrow carousel-next" onClick={() => moveInfoSlide(project.id, 1)} aria-label="MÃ©dia suivant">â€º</button>
               </div>
               <div className="carousel-caption">
-                <span>Selected work · {project.name}</span>
+                <span>Selected work Â· {project.name}</span>
                 <small>{String(infoSlide + 1).padStart(2, '0')} / {String(project.videos.length).padStart(2, '0')}</small>
               </div>
-              <div className="carousel-dots" aria-label="Choisir un média">
+              <div className="carousel-dots" aria-label="Choisir un mÃ©dia">
                 {project.videos.map((media, index) => (
                   <button
                     type="button"
                     key={media.src}
                     className={infoSlide === index ? 'is-active' : ''}
                     onClick={() => setInfoSlides((current) => ({ ...current, [project.id]: index }))}
-                    aria-label={`Afficher le média ${index + 1}`}
+                    aria-label={`Afficher le mÃ©dia ${index + 1}`}
                   />
                 ))}
               </div>
@@ -447,19 +502,60 @@ function ProjectDesktop() {
         )
       })}
 
-      <div className="desktop-hint">Clique sur un dossier pour l’ouvrir</div>
+      <div className="desktop-hint">Clique sur un dossier pour lâ€™ouvrir</div>
+
+      {socialWindows.map((socialWindow, index) => {
+        const project = projectFiles.find((item) => item.id === socialWindow.projectId)
+        if (!project) return null
+        const platformName = socialWindow.platform === 'instagram' ? 'Instagram' : 'TikTok'
+        const socialUrl = project.social?.[socialWindow.platform]
+
+        return (
+          <div
+            key={socialWindow.key}
+            className={`info-window social-window social-window-${socialWindow.platform}`}
+            style={{
+              left: `calc(50% + ${socialWindow.x}px)`,
+              top: `${socialWindow.y}px`,
+              zIndex: 60 + index,
+              '--project-color': project.color,
+            }}
+          >
+            <div className="window-bar">
+              <div className="window-controls">
+                <button type="button" onClick={() => closeSocialWindow(socialWindow.key)} aria-label={`Fermer ${platformName}`} />
+                <i />
+                <i />
+              </div>
+              <span>{platformName} â€” {project.name}</span>
+            </div>
+            <div className="social-window-body">
+              <div className="social-window-badge">
+                <span aria-hidden="true">{socialWindow.platform === 'instagram' ? 'â—Ž' : 'â™ª'}</span>
+                <strong>{platformName}</strong>
+              </div>
+              <img className="social-window-logo" src={project.logo} alt="" aria-hidden="true" />
+              <p>{project.social?.handle}</p>
+              <small>FenÃªtre intÃ©grÃ©e du compte social pour {project.name}.</small>
+              <a href={socialUrl} target="_blank" rel="noreferrer" className="social-window-link">
+                Ouvrir le vrai compte
+              </a>
+            </div>
+          </div>
+        )
+      })}
 
       <div className="desktop-dock" aria-label="Barre d'applications">
-        <span className="dock-finder">◐</span>
+        <span className="dock-finder">â—</span>
         <span className="dock-ps">Ps</span>
         <span className="dock-ai">Ai</span>
-        <span className="dock-video">▶</span>
-        <span className="dock-notes">▤</span>
-        <span className="dock-photos">✿</span>
-        <span className="dock-instagram">◎</span>
-        <span className="dock-mail">✉</span>
+        <span className="dock-video">â–¶</span>
+        <span className="dock-notes">â–¤</span>
+        <span className="dock-photos">âœ¿</span>
+        <span className="dock-instagram">â—Ž</span>
+        <span className="dock-mail">âœ‰</span>
         <i />
-        <span className="dock-trash">⌫</span>
+        <span className="dock-trash">âŒ«</span>
       </div>
     </section>
   )
@@ -503,27 +599,27 @@ const personalityTraits = [
   {
     id: 'amicale',
     label: 'Amicale',
-    description: 'Toujours souriante et à l’écoute, je crée facilement des liens avec les personnes qui m’entourent. Avec mes collègues comme dans la vie, je privilégie la bienveillance, l’entraide et une ambiance où chacun se sent à l’aise.',
+    description: 'Toujours souriante et Ã  lâ€™Ã©coute, je crÃ©e facilement des liens avec les personnes qui mâ€™entourent. Avec mes collÃ¨gues comme dans la vie, je privilÃ©gie la bienveillance, lâ€™entraide et une ambiance oÃ¹ chacun se sent Ã  lâ€™aise.',
   },
   {
     id: 'dynamique',
     label: 'Dynamique',
-    description: 'J’apporte de l’énergie dans chaque projet. J’aime avancer, proposer de nouvelles idées et entraîner l’équipe avec moi, tout en restant attentive au rythme et aux besoins de chacun.',
+    description: 'Jâ€™apporte de lâ€™Ã©nergie dans chaque projet. Jâ€™aime avancer, proposer de nouvelles idÃ©es et entraÃ®ner lâ€™Ã©quipe avec moi, tout en restant attentive au rythme et aux besoins de chacun.',
   },
   {
     id: 'drole',
-    label: 'Drôle',
-    description: 'Mon humour spontané rend les échanges plus naturels et les journées plus légères. J’aime détendre l’atmosphère, sans perdre mon sérieux lorsqu’il faut se concentrer sur le travail.',
+    label: 'DrÃ´le',
+    description: 'Mon humour spontanÃ© rend les Ã©changes plus naturels et les journÃ©es plus lÃ©gÃ¨res. Jâ€™aime dÃ©tendre lâ€™atmosphÃ¨re, sans perdre mon sÃ©rieux lorsquâ€™il faut se concentrer sur le travail.',
   },
   {
     id: 'creative',
-    label: 'Créative',
-    description: 'J’observe les détails, j’imagine des concepts originaux et je cherche toujours une manière personnelle de raconter une histoire. Ma créativité nourrit autant mes contenus que ma façon de résoudre les problèmes.',
+    label: 'CrÃ©ative',
+    description: 'Jâ€™observe les dÃ©tails, jâ€™imagine des concepts originaux et je cherche toujours une maniÃ¨re personnelle de raconter une histoire. Ma crÃ©ativitÃ© nourrit autant mes contenus que ma faÃ§on de rÃ©soudre les problÃ¨mes.',
   },
   {
     id: 'proactive',
     label: 'Proactive',
-    description: 'Je n’attends pas qu’on me dise quoi faire pour avancer. J’anticipe, je prends des initiatives et je propose des solutions concrètes afin de faire progresser les projets avec efficacité.',
+    description: 'Je nâ€™attends pas quâ€™on me dise quoi faire pour avancer. Jâ€™anticipe, je prends des initiatives et je propose des solutions concrÃ¨tes afin de faire progresser les projets avec efficacitÃ©.',
   },
 ]
 
@@ -744,7 +840,7 @@ export default function App() {
         <a
           className="portrait-stage"
           href="#about"
-          aria-label="Découvrir plus d'informations sur Kawtar"
+          aria-label="DÃ©couvrir plus d'informations sur Kawtar"
         >
           <img className="portrait-blur" src={asset('/hero.png')} alt="Portrait de Kawtar" decoding="async" />
           <img className="portrait-focus" src={asset('/hero.png')} alt="" aria-hidden="true" decoding="async" />
@@ -770,7 +866,7 @@ export default function App() {
         <VideoRail active={heroVisible} />
 
         <div className="hero-bottom">
-          <span>Portfolio · 2026</span>
+          <span>Portfolio Â· 2026</span>
           <span>Move your cursor</span>
         </div>
       </section>
@@ -781,7 +877,7 @@ export default function App() {
           <em>My bag</em>
         </div>
 
-        <div className="bag-labels" aria-label="Matériel de Kawtar">
+        <div className="bag-labels" aria-label="MatÃ©riel de Kawtar">
           {aboutLabels.map((label) => (
             <button
               className={`bag-label bag-label-${label.id}${selectedObject === label.id ? ' is-active' : ''}`}
@@ -818,7 +914,7 @@ export default function App() {
           <img src={asset('/3D_glb_optimized/kaw.png')} alt="" loading="lazy" decoding="async" />
         </div>
 
-        <div className="trait-list" aria-label="Les qualités de Kawtar">
+        <div className="trait-list" aria-label="Les qualitÃ©s de Kawtar">
           {personalityTraits.map((trait) => (
             <button
               className={`trait-pill trait-pill-${trait.id}${selectedTrait === trait.id ? ' is-active' : ''}`}
@@ -851,7 +947,7 @@ export default function App() {
         </div>
 
         <div className="education-heading education-heading-academic">
-          <strong>Mon parcours académique ?</strong>
+          <strong>Mon parcours acadÃ©mique ?</strong>
           <em>Lemme show you the receipt...</em>
         </div>
 
@@ -875,7 +971,7 @@ export default function App() {
               className="printer-layer printer-ticket"
               id="education-ticket"
               src={asset('/3D_glb_optimized/ticket.png')}
-              alt="Ticket présentant le parcours académique de Kawtar"
+              alt="Ticket prÃ©sentant le parcours acadÃ©mique de Kawtar"
               aria-hidden={!ticketPrinted}
               decoding="async"
             />
@@ -904,3 +1000,4 @@ export default function App() {
     </main>
   )
 }
+
