@@ -536,7 +536,7 @@ function VideoRail({ active }) {
               muted
               playsInline
               preload="metadata"
-              poster={asset("public/hero.png")}
+              poster={asset("/hero.png")}
             >
               <source src={video.src} type="video/mp4" />
             </video>
