@@ -328,7 +328,7 @@ function ProjectDesktop() {
             <div className="info-copy">
               {project.id === 'naklo-b3da' ? (
                 <>
-                  <img className="naklo-info-logo" src="/projects/naklo-b3da/NAKBLO_LOGO.png" alt="Naklo B3da w i7en Lah" />
+                  <img className="naklo-info-logo" src={asset("/projects/naklo-b3da/NAKBLO_LOGO.png")} alt="Naklo B3da w i7en Lah" />
                   <section className="naklo-info-text">
                     <h4>ORIGINE <em>de notre nom</em></h4>
                     <p>J’AI DÉCIDÉ DE NOMMER MON COMPTE “NAKLO B3DA W I7EN LAH”, UNE EXPRESSION TIRÉE TOUT DROIT DU DIALECTE MAROCAIN, ELLE SIGNIFIE “MANGEONS D’ABORD, DIEU S’OCCUPERA DU RESTE”. C’EST UNE EXPRESSION CÉLÈBRE DANS LA CULTURE MAROCAINE, ELLE PERMETS DE RECENTRER LE SUJET SUR LE PLUS IMPORTANT; LA SIMPLICITÉ DE PARTAGER UN MOMENT DE CONVIVIALITÉ AUTOUR D’UN BON PLAT, ET DE LAISSER LE RESTE AUX MAINS DE DIEU.</p>
@@ -340,7 +340,7 @@ function ProjectDesktop() {
                 </>
               ) : project.id === 'ks-modesty' ? (
                 <>
-                  <img className="ks-info-logo" src="/projects/KSMODESTY/KS_logo.png" alt="KS Modesty" />
+                  <img className="ks-info-logo" src={asset("/projects/KSMODESTY/KS_logo.png")} alt="KS Modesty" />
                   <section className="ks-info-text">
                     <h4>CONCEPT &amp; OBJECTIF <em>de ce projet</em></h4>
                     <p>J’AI DÉVELOPPÉ UN PROJET QUI ME RESSEMBLE ET QUI RÉPONDAIT À UN RÉEL BESOIN SUR LE MARCHÉ. KS MODESTY EST UNE MARQUE SPÉCIALISÉE DANS LES VOILES D’EXCEPTION, ET SE DISTINGUE PAR UNE APPROCHE NOVATRICE, LE MESSAGE QUE JE SOUHAITE PASSER EST QU’UNE FEMME QUI FAIS LE CHOIX VESTIMENTAIRE DU VOILE, NE DOIT PAS SE PERDRE DANS LES ATTENTES DE LA SOCIÉTÉ À CE QU’ELLE SE VÊTISSE DE MANIÈRE MONOTONE ET SANS EXTRAVAGANCE. BREF J’EN AI DIS ASSEZ.</p>
@@ -348,7 +348,7 @@ function ProjectDesktop() {
                 </>
               ) : project.id === 'riwaya' ? (
                 <>
-                  <img className="riwaya-info-logo" src="/projects/RIWAYA/riwaya_logo.png" alt="Riwāya" />
+                  <img className="riwaya-info-logo" src={asset("/projects/RIWAYA/riwaya_logo.png")} alt="Riwāya" />
                   <section className="riwaya-info-text">
                     <h4>ORIGINE <em>de notre nom</em></h4>
                     <p>Riwaya signifie « histoire » ou « récit » en arabe. Un nom qui reflète parfaitement ma vision de la création de contenu événementiel : chaque événement raconte une histoire unique. Derrière chaque regard, chaque détail, il y a un récit qui mérite d’être capturé et transmis.</p>
@@ -536,7 +536,7 @@ function VideoRail({ active }) {
               muted
               playsInline
               preload="metadata"
-              poster={asset("/hero.png")}
+              poster={asset("public\\hero.png")}
             >
               <source src={video.src} type="video/mp4" />
             </video>
