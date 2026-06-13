@@ -536,7 +536,7 @@ function VideoRail({ active }) {
               muted
               playsInline
               preload="metadata"
-              poster={asset("public\\hero.png")}
+              poster={asset("public/hero.png")}
             >
               <source src={video.src} type="video/mp4" />
             </video>
@@ -737,7 +737,7 @@ export default function App() {
         <VideoRail active={heroVisible} />
 
         <div className="hero-bottom">
-          <span>Creative portfolio · 2026</span>
+          <span>Portfolio · 2026</span>
           <span>Move your cursor</span>
         </div>
       </section>
