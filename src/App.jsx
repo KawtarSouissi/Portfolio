@@ -63,6 +63,23 @@ const projectFiles = [
   },
 ]
 
+const pdfAssets = {
+  cv: asset('/projects/Green Aesthetic Creative Cv Resume (1).pdf'),
+  letter: asset('/projects/Lettre de motivation Kawtar Souissi.pdf'),
+}
+
+const staticAssetsToPreload = [
+  asset('/hero.png'),
+  asset('/3D_glb_optimized/kaw.png'),
+  asset('/macbook-projects-wallpaper.png'),
+  asset('/3D_glb_optimized/tea.glb'),
+  asset('/3D_glb_optimized/bas_bouche.png'),
+  asset('/3D_glb_optimized/haut_bouche.png'),
+  asset('/3D_glb_optimized/ticket.png'),
+  pdfAssets.cv,
+  pdfAssets.letter,
+]
+
 function ProjectDesktop() {
   const [openFolders, setOpenFolders] = useState([])
   const [infoSlides, setInfoSlides] = useState({})
@@ -245,11 +262,11 @@ function ProjectDesktop() {
           </div>
           <article className="cv-preview">
             <object
-              data="/projects/Green%20Aesthetic%20Creative%20Cv%20Resume%20(1).pdf"
+              data={pdfAssets.cv}
               type="application/pdf"
               aria-label="CV de Kawtar"
             >
-              <a href="/projects/Green%20Aesthetic%20Creative%20Cv%20Resume%20(1).pdf" target="_blank" rel="noreferrer">
+              <a href={pdfAssets.cv} target="_blank" rel="noreferrer">
                 Ouvrir le CV de Kawtar
               </a>
             </object>
@@ -269,11 +286,11 @@ function ProjectDesktop() {
           </div>
           <article className="cv-preview">
             <object
-              data="/projects/Lettre%20de%20motivation%20Kawtar%20Souissi.pdf"
+              data={pdfAssets.letter}
               type="application/pdf"
               aria-label="Lettre de motivation de Kawtar"
             >
-              <a href="/projects/Lettre%20de%20motivation%20Kawtar%20Souissi.pdf" target="_blank" rel="noreferrer">
+              <a href={pdfAssets.letter} target="_blank" rel="noreferrer">
                 Ouvrir la lettre de motivation de Kawtar
               </a>
             </object>
@@ -557,14 +574,30 @@ export default function App() {
   const [heroVisible, setHeroVisible] = useState(true)
   const [bagVisible, setBagVisible] = useState(false)
   const [aboutVisible, setAboutVisible] = useState(false)
-  const [loadBagScene, setLoadBagScene] = useState(false)
-  const [loadSimsScene, setLoadSimsScene] = useState(false)
-  const [loadEducationScene, setLoadEducationScene] = useState(false)
+  const [loadBagScene, setLoadBagScene] = useState(true)
+  const [loadSimsScene, setLoadSimsScene] = useState(true)
+  const [loadEducationScene, setLoadEducationScene] = useState(true)
   const [educationVisible, setEducationVisible] = useState(false)
   const [ticketPrinted, setTicketPrinted] = useState(false)
   const [selectedTrait, setSelectedTrait] = useState('amicale')
   const [hoveredTrait, setHoveredTrait] = useState(null)
-  const activeTrait = personalityTraits.find((trait) => trait.id === selectedTrait)
+  const activeTrait = personalityTraits.find((trait) => trait.id === selectedTrait) ?? personalityTraits[0]
+
+  useEffect(() => {
+    const projectAssets = projectFiles.flatMap((project) => [
+      project.logo,
+      ...project.images.map((image) => image.src),
+      ...project.videos.map((video) => video.src),
+    ])
+    const assetsToWarm = [...staticAssetsToPreload, ...videos.map((video) => video.src), ...projectAssets]
+    const warmed = new Set()
+
+    assetsToWarm.forEach((url) => {
+      if (!url || warmed.has(url)) return
+      warmed.add(url)
+      fetch(url, { cache: 'force-cache' }).catch(() => {})
+    })
+  }, [])
 
   useEffect(() => {
     const hero = heroRef.current
@@ -644,7 +677,7 @@ export default function App() {
           setAboutVisible(entry.isIntersecting)
           if (entry.isIntersecting) {
             setLoadSimsScene(true)
-            fetch('/3D_glb_optimized/tea.glb', { cache: 'force-cache' }).catch(() => {})
+            fetch(asset('/3D_glb_optimized/tea.glb'), { cache: 'force-cache' }).catch(() => {})
           }
         }
         if (entry.target === education) {
@@ -713,8 +746,8 @@ export default function App() {
           href="#about"
           aria-label="Découvrir plus d'informations sur Kawtar"
         >
-          <img className="portrait-blur" src="/hero.png" alt="Portrait de Kawtar" decoding="async" />
-          <img className="portrait-focus" src="/hero.png" alt="" aria-hidden="true" decoding="async" />
+          <img className="portrait-blur" src={asset('/hero.png')} alt="Portrait de Kawtar" decoding="async" />
+          <img className="portrait-focus" src={asset('/hero.png')} alt="" aria-hidden="true" decoding="async" />
           <span className="portrait-cta" aria-hidden="true">
             <span>Plus d&apos;info<br />sur moi</span>
             <svg viewBox="0 0 150 110" role="presentation">
@@ -782,7 +815,7 @@ export default function App() {
         </article>
 
         <div className="about-character" aria-hidden="true">
-          <img src="/3D_glb_optimized/kaw.png" alt="" loading="lazy" decoding="async" />
+          <img src={asset('/3D_glb_optimized/kaw.png')} alt="" loading="lazy" decoding="async" />
         </div>
 
         <div className="trait-list" aria-label="Les qualités de Kawtar">
@@ -796,8 +829,7 @@ export default function App() {
               onClick={() => setSelectedTrait(trait.id)}
               onPointerEnter={() => setHoveredTrait(trait.id)}
               onPointerLeave={() => setHoveredTrait(null)}
-            >
-            </button>
+            />
           ))}
         </div>
 

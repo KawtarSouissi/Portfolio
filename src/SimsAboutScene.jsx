@@ -208,7 +208,7 @@ export default function SimsAboutScene({ active, selected, onSelect }) {
         gl.outputColorSpace = THREE.SRGBColorSpace
         gl.toneMappingExposure = 1.05
       }}
-      onPointerMissed={() => onSelect(null)}
+      onPointerMissed={() => {}}
     >
       <FrameLoopController active={active} />
       <Scene selected={selected} onSelect={onSelect} />
