@@ -868,7 +868,7 @@ export default function App() {
       .filter(Boolean)
       .join('\n')
 
-    window.location.href = `mailto:kawtar@example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    window.location.href = `mailto:kawtarsouissi@hotmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
   }
 
   return (
@@ -1089,7 +1089,10 @@ export default function App() {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    LinkedIn
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path fill="currentColor" d="M4.98 3.5A2.48 2.48 0 1 0 5 8.46a2.48 2.48 0 0 0-.02-4.96ZM3 9h4v12H3V9Zm7 0h3.83v1.64h.05c.53-1 1.84-2.06 3.79-2.06 4.05 0 4.8 2.66 4.8 6.12V21h-4v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.15 1.45-2.15 2.95V21h-4V9Z"/>
+                    </svg>
+                    <span>LinkedIn</span>
                   </a>
                   <a className="contact-phone" href="tel:+33000000000">+33 0 00 00 00 00</a>
                 </div>

@@ -1,5 +1,4 @@
-@import url('https://fonts.cdnfonts.com/css/sloop-script');
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Gochi+Hand&family=Italiana&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Gochi+Hand&family=Italiana&family=Pinyon+Script&display=swap');
 
 :root {
   font-family: 'DM Sans', Arial, sans-serif;
@@ -130,7 +129,7 @@ a {
 .desktop-title em {
   margin-top: 5px;
   color: #2a2123;
-  font: 400 clamp(42px, 4vw, 67px)/.65 'Sloop Script', cursive;
+  font: 400 clamp(42px, 4vw, 67px)/.65 'Pinyon Script', cursive;
 }
 
 .desktop-folders {
@@ -1847,7 +1846,7 @@ a {
 .naklo-info-text h4 em {
   display: block;
   margin-left: 53px;
-  font: 400 clamp(21px, 1.9vw, 30px)/.65 'Sloop Script', cursive;
+  font: 400 clamp(21px, 1.9vw, 30px)/.65 'Pinyon Script', cursive;
 }
 
 .naklo-info-text p {
@@ -1909,7 +1908,7 @@ a {
 .ks-info-text h4 em {
   display: block;
   margin-left: 52px;
-  font: 400 clamp(21px, 1.9vw, 30px)/.65 'Sloop Script', cursive;
+  font: 400 clamp(21px, 1.9vw, 30px)/.65 'Pinyon Script', cursive;
 }
 
 .ks-info-text p {
@@ -1980,7 +1979,7 @@ a {
 .riwaya-info-text h4 em {
   display: block;
   margin-left: 52px;
-  font: 400 clamp(21px, 1.9vw, 30px)/.65 'Sloop Script', cursive;
+  font: 400 clamp(21px, 1.9vw, 30px)/.65 'Pinyon Script', cursive;
 }
 
 .riwaya-info-text p {
@@ -2206,7 +2205,7 @@ a {
     translateY(calc(var(--script-y) + var(--hover-y)))
     rotate(calc(var(--script-rotate) + var(--hover-rotate)));
   transition: transform 260ms cubic-bezier(.2, .75, .2, 1);
-  font: 400 clamp(66px, 7.5vw, 122px)/.7 'Sloop Script', cursive;
+  font: 400 clamp(66px, 7.5vw, 122px)/.7 'Pinyon Script', cursive;
   letter-spacing: -.04em;
 }
 
@@ -2352,49 +2351,27 @@ a {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: 7rem 2rem;
-  background:
-    radial-gradient(circle at center, rgba(120, 11, 28, .18), transparent 34%),
-    linear-gradient(180deg, #f7f0ea 0%, #f4e9e2 100%);
+  padding: 5.5rem 2rem;
+  background: #fff;
   overflow: hidden;
 }
 
 .convinced-section::before,
 .convinced-section::after {
-  content: '';
-  position: absolute;
-  inset: auto;
-  width: 28rem;
-  height: 28rem;
-  border-radius: 50%;
-  filter: blur(90px);
-  opacity: .28;
-  pointer-events: none;
-}
-
-.convinced-section::before {
-  top: 8%;
-  left: -8%;
-  background: rgba(132, 8, 28, .28);
-}
-
-.convinced-section::after {
-  right: -10%;
-  bottom: 6%;
-  background: rgba(196, 153, 165, .34);
+  display: none;
 }
 
 .convinced-card {
   position: relative;
   z-index: 1;
-  width: min(980px, 100%);
-  min-height: 460px;
-  padding: 4.5rem 3rem;
-  border: 1px solid rgba(120, 22, 39, .14);
-  border-radius: 36px;
-  background: rgba(255, 250, 246, .82);
-  box-shadow: 0 28px 70px rgba(74, 24, 35, .12);
-  backdrop-filter: blur(12px);
+  width: min(880px, 100%);
+  min-height: 380px;
+  padding: 2rem 1rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
   text-align: center;
 }
 
@@ -2404,25 +2381,25 @@ a {
 
 .convinced-card strong {
   display: block;
-  margin-bottom: .85rem;
-  color: #7e0d21;
-  font: 700 clamp(1rem, 1.4vw, 1.15rem)/1 Georgia, serif;
-  letter-spacing: .34em;
+  margin-bottom: .5rem;
+  color: #240d12;
+  font: 400 clamp(2rem, 4vw, 3rem)/.9 'Gochi Hand', cursive;
+  letter-spacing: .02em;
 }
 
 .convinced-card em {
   display: block;
   margin: 0;
-  color: #6d0718;
-  font: 400 clamp(3.4rem, 8vw, 6.8rem)/.72 'Sloop Script', cursive;
+  color: #490713;
+  font: 400 clamp(4rem, 9vw, 7rem)/.72 'Pinyon Script', cursive;
   letter-spacing: -.03em;
 }
 
 .convinced-actions {
   position: relative;
-  width: min(440px, 100%);
-  height: 220px;
-  margin: 3.4rem auto 0;
+  width: min(360px, 100%);
+  height: 150px;
+  margin: 2.4rem auto 0;
 }
 
 .convinced-yes,
@@ -2430,82 +2407,78 @@ a {
   position: absolute;
   top: 50%;
   left: 50%;
-  min-width: 148px;
-  padding: 1rem 1.6rem;
-  border-radius: 999px;
-  border: 1px solid rgba(120, 22, 39, .18);
-  box-shadow: 0 14px 30px rgba(74, 24, 35, .1);
-  font: 700 .95rem/1 -apple-system, BlinkMacSystemFont, sans-serif;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  transition: transform 280ms cubic-bezier(.2, .8, .2, 1), box-shadow 180ms ease, background 180ms ease, color 180ms ease;
+  min-width: 0;
+  padding: .25rem;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  font: 400 clamp(2rem, 3vw, 2.6rem)/1 'Gochi Hand', cursive;
+  letter-spacing: 0;
+  text-transform: none;
+  transition: transform 180ms cubic-bezier(.2, .8, .2, 1), color 180ms ease, opacity 180ms ease;
 }
 
 .convinced-yes {
-  transform: translate(calc(-50% - 98px), -50%);
-  background: #7e0d21;
-  color: #fff6f0;
+  transform: translate(calc(-50% - 72px), -50%) rotate(-3deg);
+  color: #7e0d21;
   text-decoration: none;
   cursor: pointer;
-  border: 0;
 }
 
 .convinced-yes:hover,
 .convinced-yes:focus-visible {
-  background: #901129;
-  box-shadow: 0 18px 36px rgba(74, 24, 35, .16);
+  color: #b30f2c;
+  transform: translate(calc(-50% - 72px), calc(-50% - 4px)) rotate(-5deg) scale(1.04);
 }
 
 .convinced-no {
   --run-x: 0px;
   --run-y: 0px;
-  transform: translate(calc(-50% + 90px + var(--run-x)), calc(-50% + var(--run-y)));
-  background: #fffaf6;
-  color: #7e0d21;
+  transform: translate(calc(-50% + 74px + var(--run-x)), calc(-50% + var(--run-y))) rotate(4deg);
+  color: #1d1719;
   cursor: pointer;
 }
 
 .convinced-no:hover,
 .convinced-no:focus-visible {
-  box-shadow: 0 18px 36px rgba(74, 24, 35, .16);
+  color: #7e0d21;
 }
 
 .contact-panel {
   display: grid;
   grid-template-columns: minmax(260px, .9fr) minmax(320px, 1.1fr);
-  gap: 2.8rem;
+  gap: 3rem;
   align-items: start;
 }
 
 .contact-copy strong {
   display: block;
-  margin-bottom: .8rem;
-  color: #7e0d21;
-  font: 700 .95rem/1 Georgia, serif;
-  letter-spacing: .28em;
+  margin-bottom: .35rem;
+  color: #270f14;
+  font: 400 clamp(1.5rem, 3vw, 2.2rem)/.95 'Gochi Hand', cursive;
+  letter-spacing: 0;
 }
 
 .contact-copy em {
   display: block;
   margin: 0 0 1rem;
-  color: #6d0718;
-  font: 400 clamp(2.7rem, 5vw, 5rem)/.76 'Sloop Script', cursive;
+  color: #5d0817;
+  font: 400 clamp(3.1rem, 5.5vw, 5.6rem)/.74 'Pinyon Script', cursive;
   letter-spacing: -.02em;
 }
 
 .contact-copy p {
   max-width: 32rem;
   margin: 0;
-  color: #4e4044;
-  font-size: 1rem;
-  line-height: 1.8;
+  color: #3e3034;
+  font: 400 clamp(1rem, 1.5vw, 1.12rem)/1.7 'Gochi Hand', cursive;
 }
 
 .contact-links {
   display: flex;
   flex-wrap: wrap;
-  gap: .9rem;
-  margin-top: 2rem;
+  gap: 1.1rem;
+  margin-top: 1.8rem;
 }
 
 .contact-linkedin,
@@ -2513,91 +2486,97 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 160px;
-  padding: .95rem 1.2rem;
-  border-radius: 999px;
-  border: 1px solid rgba(120, 22, 39, .16);
-  background: #fffdfb;
+  gap: .7rem;
+  min-width: 0;
+  padding: .15rem 0;
+  border-radius: 0;
+  border: 0;
+  background: transparent;
   color: #7e0d21;
-  font: 700 .84rem/1 -apple-system, BlinkMacSystemFont, sans-serif;
-  letter-spacing: .12em;
-  text-transform: uppercase;
+  font: 400 clamp(1.1rem, 1.8vw, 1.35rem)/1 'Gochi Hand', cursive;
+  letter-spacing: 0;
+  text-transform: none;
   text-decoration: none;
-  box-shadow: 0 12px 26px rgba(74, 24, 35, .08);
+  box-shadow: none;
 }
 
 .contact-linkedin:hover,
 .contact-linkedin:focus-visible,
 .contact-phone:hover,
 .contact-phone:focus-visible {
-  background: #7e0d21;
-  color: #fff8f3;
+  color: #b10e2b;
+}
+
+.contact-linkedin svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: block;
 }
 
 .contact-form {
   display: grid;
   gap: 1rem;
-  padding: 1.4rem;
-  border: 1px solid rgba(120, 22, 39, .1);
-  border-radius: 28px;
-  background: rgba(255, 255, 255, .72);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .72);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .contact-form label {
   display: grid;
-  gap: .5rem;
+  gap: .35rem;
 }
 
 .contact-form label span {
-  color: #7e0d21;
-  font: 700 .76rem/1 -apple-system, BlinkMacSystemFont, sans-serif;
-  letter-spacing: .14em;
-  text-transform: uppercase;
+  color: #4f131d;
+  font: 400 1.1rem/1 'Gochi Hand', cursive;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .contact-form input,
 .contact-form textarea {
   width: 100%;
-  padding: 1rem 1rem;
-  border: 1px solid rgba(120, 22, 39, .16);
-  border-radius: 18px;
-  background: rgba(255, 251, 248, .96);
+  padding: .95rem 0;
+  border: 0;
+  border-bottom: 1px solid rgba(120, 22, 39, .2);
+  border-radius: 0;
+  background: transparent;
   color: #341f25;
-  font: 500 .98rem/1.45 -apple-system, BlinkMacSystemFont, sans-serif;
+  font: 400 1.02rem/1.45 'Gochi Hand', cursive;
   outline: none;
-  transition: border-color 180ms ease, box-shadow 180ms ease;
+  transition: border-color 180ms ease, color 180ms ease;
 }
 
 .contact-form input:focus,
 .contact-form textarea:focus {
-  border-color: rgba(126, 13, 33, .5);
-  box-shadow: 0 0 0 4px rgba(126, 13, 33, .08);
+  border-color: rgba(126, 13, 33, .7);
 }
 
 .contact-form textarea {
   resize: vertical;
-  min-height: 160px;
+  min-height: 140px;
 }
 
 .contact-submit {
   justify-self: start;
-  min-width: 150px;
-  padding: 1rem 1.35rem;
+  min-width: 0;
+  padding: .25rem 0;
   border: 0;
-  border-radius: 999px;
-  background: #7e0d21;
-  color: #fff8f3;
-  font: 700 .86rem/1 -apple-system, BlinkMacSystemFont, sans-serif;
-  letter-spacing: .13em;
-  text-transform: uppercase;
+  border-radius: 0;
+  background: transparent;
+  color: #7e0d21;
+  font: 400 clamp(1.4rem, 2vw, 1.85rem)/1 'Gochi Hand', cursive;
+  letter-spacing: 0;
+  text-transform: none;
   cursor: pointer;
-  box-shadow: 0 14px 26px rgba(74, 24, 35, .14);
+  box-shadow: none;
 }
 
 .contact-submit:hover,
 .contact-submit:focus-visible {
-  background: #96122c;
+  color: #b10e2b;
 }
 
 .education-heading {
@@ -2620,7 +2599,7 @@ a {
 .education-heading em {
   margin-top: 4px;
   color: #282224;
-  font: 400 clamp(32px, 3.5vw, 58px)/.62 'Sloop Script', cursive;
+  font: 400 clamp(32px, 3.5vw, 58px)/.62 'Pinyon Script', cursive;
 }
 
 .education-heading-tea {
@@ -3145,7 +3124,7 @@ a {
 .about-title em {
   margin: 2px 0 0 28px;
   color: #090304;
-  font: 400 clamp(52px, 5.5vw, 88px)/.62 'Sloop Script', cursive;
+  font: 400 clamp(52px, 5.5vw, 88px)/.62 'Pinyon Script', cursive;
   transform: rotate(-8deg);
 }
 
@@ -3307,7 +3286,7 @@ a {
 
 .bag-title em {
   margin-top: -2px;
-  font: 400 clamp(48px, 5.2vw, 82px)/.7 'Sloop Script', cursive;
+  font: 400 clamp(48px, 5.2vw, 82px)/.7 'Pinyon Script', cursive;
 }
 
 .bag-title span {
@@ -3391,7 +3370,7 @@ a {
 
 .bag-label em {
   margin-top: 2px;
-  font: 400 clamp(15px, 1.35vw, 22px)/.95 'Sloop Script', cursive;
+  font: 400 clamp(15px, 1.35vw, 22px)/.95 'Pinyon Script', cursive;
   white-space: nowrap;
 }
 
@@ -3917,41 +3896,38 @@ a {
   }
 
   .convinced-section {
-    min-height: 860px;
-    padding: 5rem 1rem;
+    min-height: 780px;
+    padding: 4rem 1rem;
   }
 
   .convinced-card {
     width: 100%;
-    min-height: 540px;
-    padding: 2.4rem 1.2rem;
-    border-radius: 28px;
+    min-height: 500px;
+    padding: 1.2rem .6rem;
   }
 
   .convinced-card em {
-    font-size: clamp(2.8rem, 14vw, 4.3rem);
+    font-size: clamp(3.1rem, 14vw, 4.6rem);
   }
 
   .convinced-actions {
     width: 100%;
-    max-width: 320px;
-    height: 180px;
-    margin-top: 2.4rem;
+    max-width: 280px;
+    height: 130px;
+    margin-top: 1.8rem;
   }
 
   .convinced-yes,
   .convinced-no {
-    min-width: 132px;
-    padding: .95rem 1.2rem;
-    font-size: .82rem;
+    font-size: 1.7rem;
   }
 
   .convinced-yes {
-    transform: translate(calc(-50% - 76px), -50%);
+    transform: translate(calc(-50% - 56px), -50%) rotate(-3deg);
   }
 
   .convinced-no {
-    transform: translate(calc(-50% + 76px + var(--run-x)), calc(-50% + var(--run-y)));
+    transform: translate(calc(-50% + 54px + var(--run-x)), calc(-50% + var(--run-y))) rotate(4deg);
   }
 
   .contact-panel {
@@ -3960,12 +3936,12 @@ a {
   }
 
   .contact-copy em {
-    font-size: clamp(2.3rem, 12vw, 3.9rem);
+    font-size: clamp(2.7rem, 12vw, 4.2rem);
   }
 
   .contact-copy p {
-    font-size: .95rem;
-    line-height: 1.7;
+    font-size: 1rem;
+    line-height: 1.65;
   }
 
   .contact-links {
@@ -3981,8 +3957,7 @@ a {
   }
 
   .contact-form {
-    padding: 1rem;
-    border-radius: 22px;
+    padding: 0;
   }
 }
 
@@ -4020,3 +3995,4 @@ a {
     transform: translateY(22%);
   }
 }
+
