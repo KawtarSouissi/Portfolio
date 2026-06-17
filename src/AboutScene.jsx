@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react'
+﻿import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
@@ -255,3 +255,4 @@ export default function AboutScene({ active, selected, onSelect }) {
 items.forEach((item) => useGLTF.preload(item.file))
 softwareItems.forEach((item) => useGLTF.preload(item.file))
 useGLTF.preload(`${MODEL_ROOT}/burgundy sac a main.glb`)
+

@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useMemo, useRef } from 'react'
+﻿import React, { Suspense, useEffect, useMemo, useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
@@ -120,3 +120,4 @@ export default function EducationTeaScene({ active }) {
 }
 
 useGLTF.preload(TEA_MODEL)
+

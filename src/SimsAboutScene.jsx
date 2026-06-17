@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+﻿import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
@@ -218,3 +218,4 @@ export default function SimsAboutScene({ active, selected, onSelect }) {
 
 traits.forEach((trait) => useGLTF.preload(trait.file))
 useGLTF.preload(EMERALD_FILE)
+
