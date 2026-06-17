@@ -666,6 +666,7 @@ export default function App() {
   const bagRef = useRef(null)
   const aboutRef = useRef(null)
   const educationRef = useRef(null)
+  const convincedRef = useRef(null)
   const [selectedObject, setSelectedObject] = useState(null)
   const [heroVisible, setHeroVisible] = useState(true)
   const [bagVisible, setBagVisible] = useState(false)
@@ -677,6 +678,7 @@ export default function App() {
   const [ticketPrinted, setTicketPrinted] = useState(false)
   const [selectedTrait, setSelectedTrait] = useState('amicale')
   const [hoveredTrait, setHoveredTrait] = useState(null)
+  const [noButtonPosition, setNoButtonPosition] = useState({ x: 0, y: 0 })
   const activeTrait = personalityTraits.find((trait) => trait.id === selectedTrait) ?? personalityTraits[0]
 
   useEffect(() => {
@@ -821,6 +823,19 @@ export default function App() {
     heading.style.removeProperty('--hover-y')
     heading.style.removeProperty('--hover-rotate')
     heading.style.removeProperty('--hover-rotate-negative')
+  }
+
+  const moveNoButton = () => {
+    const container = convincedRef.current
+    if (!container) return
+
+    const bounds = container.getBoundingClientRect()
+    const maxX = Math.max(bounds.width - 180, 0)
+    const maxY = Math.max(bounds.height - 120, 0)
+    const nextX = Math.random() * maxX - maxX / 2
+    const nextY = Math.random() * maxY - maxY / 2
+
+    setNoButtonPosition({ x: nextX, y: nextY })
   }
 
   return (
@@ -991,6 +1006,32 @@ export default function App() {
               onClick={() => setTicketPrinted((printed) => !printed)}
             >
               {ticketPrinted ? 'Ranger mon ticket' : 'Imprimer mon ticket'}
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section className="convinced-section" id="contact" ref={convincedRef}>
+        <div className="convinced-card">
+          <strong>ALORS..</strong>
+          <h2>CONVAINCUS ?</h2>
+          <div className="convinced-actions">
+            <a className="convinced-yes" href="mailto:kawtar@example.com?subject=On%20est%20convaincus">
+              Oui
+            </a>
+            <button
+              type="button"
+              className="convinced-no"
+              style={{
+                '--run-x': `${noButtonPosition.x}px`,
+                '--run-y': `${noButtonPosition.y}px`,
+              }}
+              onPointerEnter={moveNoButton}
+              onMouseDown={moveNoButton}
+              onFocus={moveNoButton}
+              aria-label="Non"
+            >
+              Non
             </button>
           </div>
         </div>

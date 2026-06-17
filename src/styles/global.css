@@ -1521,6 +1521,7 @@ a {
   color: #4a4245;
   font-size: 12px !important;
   line-height: 1.75 !important;
+  text-transform: lowercase;
 }
 
 .case-study-services {
@@ -1854,6 +1855,7 @@ a {
   font: 700 clamp(8px, .66vw, 10px)/1.4 Arial, sans-serif !important;
   letter-spacing: .01em;
   text-align: justify;
+  text-transform: lowercase;
 }
 
 .case-study-window:has(.ks-case-decoration) {
@@ -1915,6 +1917,7 @@ a {
   font: 700 clamp(9px, .72vw, 11px)/1.45 Arial, sans-serif !important;
   letter-spacing: .01em;
   text-align: left;
+  text-transform: lowercase;
 }
 
 .case-study-window:has(.ks-case-decoration) .project-image-grid figure {
@@ -1985,6 +1988,7 @@ a {
   font: 600 clamp(9px, .72vw, 11px)/1.48 Arial, sans-serif !important;
   letter-spacing: .01em;
   text-align: left;
+  text-transform: lowercase;
 }
 
 .case-study-window:has(.riwaya-case-decoration) .project-image-grid figure {
@@ -2340,6 +2344,122 @@ a {
   background-size: 380px 380px;
   mask-image: linear-gradient(90deg, #000 0 17%, rgba(0, 0, 0, .5) 27%, transparent 47%);
   pointer-events: none;
+}
+
+.convinced-section {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 7rem 2rem;
+  background:
+    radial-gradient(circle at center, rgba(120, 11, 28, .18), transparent 34%),
+    linear-gradient(180deg, #f7f0ea 0%, #f4e9e2 100%);
+  overflow: hidden;
+}
+
+.convinced-section::before,
+.convinced-section::after {
+  content: '';
+  position: absolute;
+  inset: auto;
+  width: 28rem;
+  height: 28rem;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: .28;
+  pointer-events: none;
+}
+
+.convinced-section::before {
+  top: 8%;
+  left: -8%;
+  background: rgba(132, 8, 28, .28);
+}
+
+.convinced-section::after {
+  right: -10%;
+  bottom: 6%;
+  background: rgba(196, 153, 165, .34);
+}
+
+.convinced-card {
+  position: relative;
+  z-index: 1;
+  width: min(760px, 100%);
+  min-height: 420px;
+  padding: 4.5rem 3rem;
+  border: 1px solid rgba(120, 22, 39, .14);
+  border-radius: 36px;
+  background: rgba(255, 250, 246, .82);
+  box-shadow: 0 28px 70px rgba(74, 24, 35, .12);
+  backdrop-filter: blur(12px);
+  text-align: center;
+}
+
+.convinced-card strong {
+  display: block;
+  margin-bottom: .85rem;
+  color: #7e0d21;
+  font: 700 clamp(1rem, 1.4vw, 1.15rem)/1 Georgia, serif;
+  letter-spacing: .34em;
+}
+
+.convinced-card h2 {
+  margin: 0;
+  color: #6d0718;
+  font: 700 clamp(3rem, 8vw, 6.4rem)/.92 -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -.08em;
+}
+
+.convinced-actions {
+  position: relative;
+  width: min(440px, 100%);
+  height: 220px;
+  margin: 3.4rem auto 0;
+}
+
+.convinced-yes,
+.convinced-no {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 148px;
+  padding: 1rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(120, 22, 39, .18);
+  box-shadow: 0 14px 30px rgba(74, 24, 35, .1);
+  font: 700 .95rem/1 -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.convinced-yes {
+  transform: translate(calc(-50% - 98px), -50%);
+  background: #7e0d21;
+  color: #fff6f0;
+  text-decoration: none;
+}
+
+.convinced-yes:hover,
+.convinced-yes:focus-visible {
+  background: #901129;
+  box-shadow: 0 18px 36px rgba(74, 24, 35, .16);
+}
+
+.convinced-no {
+  --run-x: 0px;
+  --run-y: 0px;
+  transform: translate(calc(-50% + 98px + var(--run-x)), calc(-50% + var(--run-y)));
+  background: #fffaf6;
+  color: #7e0d21;
+  cursor: pointer;
+}
+
+.convinced-no:hover,
+.convinced-no:focus-visible {
+  box-shadow: 0 18px 36px rgba(74, 24, 35, .16);
 }
 
 .education-heading {
