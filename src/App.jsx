@@ -679,6 +679,12 @@ export default function App() {
   const [selectedTrait, setSelectedTrait] = useState('amicale')
   const [hoveredTrait, setHoveredTrait] = useState(null)
   const [noButtonPosition, setNoButtonPosition] = useState({ x: 0, y: 0 })
+  const [contactOpen, setContactOpen] = useState(false)
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    email: '',
+    message: '',
+  })
   const activeTrait = personalityTraits.find((trait) => trait.id === selectedTrait) ?? personalityTraits[0]
 
   useEffect(() => {
@@ -830,12 +836,39 @@ export default function App() {
     if (!container) return
 
     const bounds = container.getBoundingClientRect()
-    const maxX = Math.max(bounds.width - 180, 0)
-    const maxY = Math.max(bounds.height - 120, 0)
-    const nextX = Math.random() * maxX - maxX / 2
-    const nextY = Math.random() * maxY - maxY / 2
+    const maxX = Math.min(Math.max(bounds.width * .16, 36), 110)
+    const maxY = Math.min(Math.max(bounds.height * .1, 24), 70)
+    const nextX = (Math.random() - .5) * maxX * 2
+    const nextY = (Math.random() - .5) * maxY * 2
 
     setNoButtonPosition({ x: nextX, y: nextY })
+  }
+
+  const openContactPanel = () => {
+    setContactOpen(true)
+    setNoButtonPosition({ x: 0, y: 0 })
+  }
+
+  const updateContactField = (event) => {
+    const { name, value } = event.target
+    setContactForm((current) => ({ ...current, [name]: value }))
+  }
+
+  const submitContactForm = (event) => {
+    event.preventDefault()
+    const subject = contactForm.name
+      ? `Contact portfolio - ${contactForm.name}`
+      : 'Contact portfolio Kawtar'
+    const body = [
+      contactForm.name ? `Nom : ${contactForm.name}` : null,
+      contactForm.email ? `Email : ${contactForm.email}` : null,
+      '',
+      contactForm.message || '',
+    ]
+      .filter(Boolean)
+      .join('\n')
+
+    window.location.href = `mailto:kawtar@example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
   }
 
   return (
@@ -917,7 +950,7 @@ export default function App() {
       <section className="about-me-section" id="about" ref={aboutRef}>
         <div className="about-title">
           <strong>ABOUT</strong>
-          <em>Me</em>
+          <em>Meeee</em>
         </div>
 
         <article className="trait-description" key={activeTrait.id} aria-live="polite">
@@ -1011,33 +1044,76 @@ export default function App() {
         </div>
       </section>
 
+      <ProjectDesktop />
+
       <section className="convinced-section" id="contact" ref={convincedRef}>
-        <div className="convinced-card">
-          <strong>ALORS..</strong>
-          <h2>CONVAINCUS ?</h2>
-          <div className="convinced-actions">
-            <a className="convinced-yes" href="mailto:kawtar@example.com?subject=On%20est%20convaincus">
-              Oui
-            </a>
-            <button
-              type="button"
-              className="convinced-no"
-              style={{
-                '--run-x': `${noButtonPosition.x}px`,
-                '--run-y': `${noButtonPosition.y}px`,
-              }}
-              onPointerEnter={moveNoButton}
-              onMouseDown={moveNoButton}
-              onFocus={moveNoButton}
-              aria-label="Non"
-            >
-              Non
-            </button>
-          </div>
+        <div className={`convinced-card${contactOpen ? ' is-contact-open' : ''}`}>
+          {!contactOpen ? (
+            <>
+              <strong>ALORS..</strong>
+              <em>Convaincus ?</em>
+              <div className="convinced-actions">
+                <button type="button" className="convinced-yes" onClick={openContactPanel}>
+                  Oui
+                </button>
+                <button
+                  type="button"
+                  className="convinced-no"
+                  style={{
+                    '--run-x': `${noButtonPosition.x}px`,
+                    '--run-y': `${noButtonPosition.y}px`,
+                  }}
+                  onPointerEnter={moveNoButton}
+                  onMouseDown={moveNoButton}
+                  onFocus={moveNoButton}
+                  aria-label="Non"
+                >
+                  Non
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="contact-panel">
+              <div className="contact-copy">
+                <strong>CONTACTEZ-MOI</strong>
+                <em>On travaille ensemble ?</em>
+                <p>
+                  Si mon univers, ma créativité et ma manière de raconter t’ont convaincu,
+                  parlons-en. Je suis joignable directement par LinkedIn, par téléphone ou par mail.
+                </p>
+
+                <div className="contact-links">
+                  <a
+                    className="contact-linkedin"
+                    href="https://www.linkedin.com/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    LinkedIn
+                  </a>
+                  <a className="contact-phone" href="tel:+33000000000">+33 0 00 00 00 00</a>
+                </div>
+              </div>
+
+              <form className="contact-form" onSubmit={submitContactForm}>
+                <label>
+                  <span>Nom</span>
+                  <input type="text" name="name" value={contactForm.name} onChange={updateContactField} placeholder="Ton nom" />
+                </label>
+                <label>
+                  <span>Email</span>
+                  <input type="email" name="email" value={contactForm.email} onChange={updateContactField} placeholder="tonmail@email.com" />
+                </label>
+                <label>
+                  <span>Message</span>
+                  <textarea name="message" value={contactForm.message} onChange={updateContactField} placeholder="Dis-moi tout..." rows={6} />
+                </label>
+                <button type="submit" className="contact-submit">Envoyer</button>
+              </form>
+            </div>
+          )}
         </div>
       </section>
-
-      <ProjectDesktop />
     </main>
   )
 }

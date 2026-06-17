@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Gochi+Hand&family=Italiana&family=Pinyon+Script&display=swap');
+@import url('https://fonts.cdnfonts.com/css/sloop-script');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Gochi+Hand&family=Italiana&display=swap');
 
 :root {
   font-family: 'DM Sans', Arial, sans-serif;
@@ -129,7 +130,7 @@ a {
 .desktop-title em {
   margin-top: 5px;
   color: #2a2123;
-  font: 400 clamp(42px, 4vw, 67px)/.65 'Pinyon Script', cursive;
+  font: 400 clamp(42px, 4vw, 67px)/.65 'Sloop Script', cursive;
 }
 
 .desktop-folders {
@@ -1846,7 +1847,7 @@ a {
 .naklo-info-text h4 em {
   display: block;
   margin-left: 53px;
-  font: 400 clamp(21px, 1.9vw, 30px)/.65 'Pinyon Script', cursive;
+  font: 400 clamp(21px, 1.9vw, 30px)/.65 'Sloop Script', cursive;
 }
 
 .naklo-info-text p {
@@ -1908,7 +1909,7 @@ a {
 .ks-info-text h4 em {
   display: block;
   margin-left: 52px;
-  font: 400 clamp(21px, 1.9vw, 30px)/.65 'Pinyon Script', cursive;
+  font: 400 clamp(21px, 1.9vw, 30px)/.65 'Sloop Script', cursive;
 }
 
 .ks-info-text p {
@@ -1979,7 +1980,7 @@ a {
 .riwaya-info-text h4 em {
   display: block;
   margin-left: 52px;
-  font: 400 clamp(21px, 1.9vw, 30px)/.65 'Pinyon Script', cursive;
+  font: 400 clamp(21px, 1.9vw, 30px)/.65 'Sloop Script', cursive;
 }
 
 .riwaya-info-text p {
@@ -2205,7 +2206,7 @@ a {
     translateY(calc(var(--script-y) + var(--hover-y)))
     rotate(calc(var(--script-rotate) + var(--hover-rotate)));
   transition: transform 260ms cubic-bezier(.2, .75, .2, 1);
-  font: 400 clamp(66px, 7.5vw, 122px)/.7 'Pinyon Script', cursive;
+  font: 400 clamp(66px, 7.5vw, 122px)/.7 'Sloop Script', cursive;
   letter-spacing: -.04em;
 }
 
@@ -2386,8 +2387,8 @@ a {
 .convinced-card {
   position: relative;
   z-index: 1;
-  width: min(760px, 100%);
-  min-height: 420px;
+  width: min(980px, 100%);
+  min-height: 460px;
   padding: 4.5rem 3rem;
   border: 1px solid rgba(120, 22, 39, .14);
   border-radius: 36px;
@@ -2395,6 +2396,10 @@ a {
   box-shadow: 0 28px 70px rgba(74, 24, 35, .12);
   backdrop-filter: blur(12px);
   text-align: center;
+}
+
+.convinced-card.is-contact-open {
+  text-align: left;
 }
 
 .convinced-card strong {
@@ -2405,11 +2410,12 @@ a {
   letter-spacing: .34em;
 }
 
-.convinced-card h2 {
+.convinced-card em {
+  display: block;
   margin: 0;
   color: #6d0718;
-  font: 700 clamp(3rem, 8vw, 6.4rem)/.92 -apple-system, BlinkMacSystemFont, sans-serif;
-  letter-spacing: -.08em;
+  font: 400 clamp(3.4rem, 8vw, 6.8rem)/.72 'Sloop Script', cursive;
+  letter-spacing: -.03em;
 }
 
 .convinced-actions {
@@ -2432,7 +2438,7 @@ a {
   font: 700 .95rem/1 -apple-system, BlinkMacSystemFont, sans-serif;
   letter-spacing: .12em;
   text-transform: uppercase;
-  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  transition: transform 280ms cubic-bezier(.2, .8, .2, 1), box-shadow 180ms ease, background 180ms ease, color 180ms ease;
 }
 
 .convinced-yes {
@@ -2440,6 +2446,8 @@ a {
   background: #7e0d21;
   color: #fff6f0;
   text-decoration: none;
+  cursor: pointer;
+  border: 0;
 }
 
 .convinced-yes:hover,
@@ -2451,7 +2459,7 @@ a {
 .convinced-no {
   --run-x: 0px;
   --run-y: 0px;
-  transform: translate(calc(-50% + 98px + var(--run-x)), calc(-50% + var(--run-y)));
+  transform: translate(calc(-50% + 90px + var(--run-x)), calc(-50% + var(--run-y)));
   background: #fffaf6;
   color: #7e0d21;
   cursor: pointer;
@@ -2460,6 +2468,136 @@ a {
 .convinced-no:hover,
 .convinced-no:focus-visible {
   box-shadow: 0 18px 36px rgba(74, 24, 35, .16);
+}
+
+.contact-panel {
+  display: grid;
+  grid-template-columns: minmax(260px, .9fr) minmax(320px, 1.1fr);
+  gap: 2.8rem;
+  align-items: start;
+}
+
+.contact-copy strong {
+  display: block;
+  margin-bottom: .8rem;
+  color: #7e0d21;
+  font: 700 .95rem/1 Georgia, serif;
+  letter-spacing: .28em;
+}
+
+.contact-copy em {
+  display: block;
+  margin: 0 0 1rem;
+  color: #6d0718;
+  font: 400 clamp(2.7rem, 5vw, 5rem)/.76 'Sloop Script', cursive;
+  letter-spacing: -.02em;
+}
+
+.contact-copy p {
+  max-width: 32rem;
+  margin: 0;
+  color: #4e4044;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .9rem;
+  margin-top: 2rem;
+}
+
+.contact-linkedin,
+.contact-phone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+  padding: .95rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(120, 22, 39, .16);
+  background: #fffdfb;
+  color: #7e0d21;
+  font: 700 .84rem/1 -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 12px 26px rgba(74, 24, 35, .08);
+}
+
+.contact-linkedin:hover,
+.contact-linkedin:focus-visible,
+.contact-phone:hover,
+.contact-phone:focus-visible {
+  background: #7e0d21;
+  color: #fff8f3;
+}
+
+.contact-form {
+  display: grid;
+  gap: 1rem;
+  padding: 1.4rem;
+  border: 1px solid rgba(120, 22, 39, .1);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, .72);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .72);
+}
+
+.contact-form label {
+  display: grid;
+  gap: .5rem;
+}
+
+.contact-form label span {
+  color: #7e0d21;
+  font: 700 .76rem/1 -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 1rem 1rem;
+  border: 1px solid rgba(120, 22, 39, .16);
+  border-radius: 18px;
+  background: rgba(255, 251, 248, .96);
+  color: #341f25;
+  font: 500 .98rem/1.45 -apple-system, BlinkMacSystemFont, sans-serif;
+  outline: none;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: rgba(126, 13, 33, .5);
+  box-shadow: 0 0 0 4px rgba(126, 13, 33, .08);
+}
+
+.contact-form textarea {
+  resize: vertical;
+  min-height: 160px;
+}
+
+.contact-submit {
+  justify-self: start;
+  min-width: 150px;
+  padding: 1rem 1.35rem;
+  border: 0;
+  border-radius: 999px;
+  background: #7e0d21;
+  color: #fff8f3;
+  font: 700 .86rem/1 -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 14px 26px rgba(74, 24, 35, .14);
+}
+
+.contact-submit:hover,
+.contact-submit:focus-visible {
+  background: #96122c;
 }
 
 .education-heading {
@@ -2482,7 +2620,7 @@ a {
 .education-heading em {
   margin-top: 4px;
   color: #282224;
-  font: 400 clamp(32px, 3.5vw, 58px)/.62 'Pinyon Script', cursive;
+  font: 400 clamp(32px, 3.5vw, 58px)/.62 'Sloop Script', cursive;
 }
 
 .education-heading-tea {
@@ -3007,7 +3145,7 @@ a {
 .about-title em {
   margin: 2px 0 0 28px;
   color: #090304;
-  font: 400 clamp(52px, 5.5vw, 88px)/.62 'Pinyon Script', cursive;
+  font: 400 clamp(52px, 5.5vw, 88px)/.62 'Sloop Script', cursive;
   transform: rotate(-8deg);
 }
 
@@ -3169,7 +3307,7 @@ a {
 
 .bag-title em {
   margin-top: -2px;
-  font: 400 clamp(48px, 5.2vw, 82px)/.7 'Pinyon Script', cursive;
+  font: 400 clamp(48px, 5.2vw, 82px)/.7 'Sloop Script', cursive;
 }
 
 .bag-title span {
@@ -3253,7 +3391,7 @@ a {
 
 .bag-label em {
   margin-top: 2px;
-  font: 400 clamp(15px, 1.35vw, 22px)/.95 'Pinyon Script', cursive;
+  font: 400 clamp(15px, 1.35vw, 22px)/.95 'Sloop Script', cursive;
   white-space: nowrap;
 }
 
@@ -3776,6 +3914,75 @@ a {
 
   .education-ticket {
     padding: 20px 18px 24px;
+  }
+
+  .convinced-section {
+    min-height: 860px;
+    padding: 5rem 1rem;
+  }
+
+  .convinced-card {
+    width: 100%;
+    min-height: 540px;
+    padding: 2.4rem 1.2rem;
+    border-radius: 28px;
+  }
+
+  .convinced-card em {
+    font-size: clamp(2.8rem, 14vw, 4.3rem);
+  }
+
+  .convinced-actions {
+    width: 100%;
+    max-width: 320px;
+    height: 180px;
+    margin-top: 2.4rem;
+  }
+
+  .convinced-yes,
+  .convinced-no {
+    min-width: 132px;
+    padding: .95rem 1.2rem;
+    font-size: .82rem;
+  }
+
+  .convinced-yes {
+    transform: translate(calc(-50% - 76px), -50%);
+  }
+
+  .convinced-no {
+    transform: translate(calc(-50% + 76px + var(--run-x)), calc(-50% + var(--run-y)));
+  }
+
+  .contact-panel {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+  }
+
+  .contact-copy em {
+    font-size: clamp(2.3rem, 12vw, 3.9rem);
+  }
+
+  .contact-copy p {
+    font-size: .95rem;
+    line-height: 1.7;
+  }
+
+  .contact-links {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .contact-linkedin,
+  .contact-phone,
+  .contact-submit {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .contact-form {
+    padding: 1rem;
+    border-radius: 22px;
   }
 }
 
