@@ -1676,6 +1676,95 @@ a {
   letter-spacing: -.035em;
 }
 
+.carousel-stage-toggle {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 0;
+  background: transparent;
+  cursor: default;
+}
+
+.carousel-stage-toggle.is-manual {
+  cursor: pointer;
+}
+
+.carousel-stage-toggle span {
+  position: absolute;
+  right: 22px;
+  top: 18px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, .28);
+  border-radius: 999px;
+  background: rgba(17, 10, 13, .42);
+  color: #fff;
+  font: 700 8px/1 'DM Sans', sans-serif;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.carousel-stage-toggle.is-manual:hover span,
+.carousel-stage-toggle.is-manual:focus-visible span {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.carousel-volume {
+  position: absolute;
+  z-index: 4;
+  left: 22px;
+  bottom: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 999px;
+  background: rgba(17, 10, 13, .38);
+  color: #fff;
+  backdrop-filter: blur(12px);
+}
+
+.carousel-volume span {
+  font: 700 8px/1 'DM Sans', sans-serif;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.carousel-volume input[type='range'] {
+  width: 120px;
+  appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .24);
+  outline: none;
+}
+
+.carousel-volume input[type='range']::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, .82);
+  border-radius: 50%;
+  background: var(--project-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .25);
+  cursor: pointer;
+}
+
+.carousel-volume input[type='range']::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, .82);
+  border-radius: 50%;
+  background: var(--project-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .25);
+  cursor: pointer;
+}
+
 .project-image-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

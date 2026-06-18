@@ -98,9 +98,12 @@ const staticAssetsToPreload = [
 function ProjectDesktop() {
   const [openFolders, setOpenFolders] = useState([])
   const [infoSlides, setInfoSlides] = useState({})
-  const [videoAudioEnabled, setVideoAudioEnabled] = useState({})
+  const [manualPlayback, setManualPlayback] = useState({})
+  const [videoPlaybackState, setVideoPlaybackState] = useState({})
+  const [videoVolumes, setVideoVolumes] = useState({})
   const [windowPositions, setWindowPositions] = useState({})
   const dragState = useRef(null)
+  const projectVideoRefs = useRef({})
   const [cvOpen, setCvOpen] = useState(false)
   const [letterOpen, setLetterOpen] = useState(false)
   const [socialWindows] = useState([])
@@ -111,6 +114,7 @@ function ProjectDesktop() {
       setInfoSlides((current) => {
         const next = { ...current }
         openFolders.forEach((id) => {
+          if (manualPlayback[id]) return
           const item = projectFiles.find((project) => project.id === id)
           if (item) next[id] = ((current[id] ?? 0) + 1) % item.videos.length
         })
@@ -119,12 +123,14 @@ function ProjectDesktop() {
     }, 4200)
 
     return () => window.clearInterval(timer)
-  }, [openFolders])
+  }, [manualPlayback, openFolders])
 
   const openProject = (id) => {
     setOpenFolders((current) => [...current.filter((item) => item !== id), id])
     setInfoSlides((current) => ({ ...current, [id]: current[id] ?? 0 }))
-    setVideoAudioEnabled((current) => ({ ...current, [id]: current[id] ?? false }))
+    setManualPlayback((current) => ({ ...current, [id]: current[id] ?? false }))
+    setVideoPlaybackState((current) => ({ ...current, [id]: current[id] ?? true }))
+    setVideoVolumes((current) => ({ ...current, [id]: current[id] ?? 1 }))
     setWindowPositions((current) => ({
       ...current,
       [id]: current[id] ?? {
@@ -150,17 +156,40 @@ function ProjectDesktop() {
   const moveInfoSlide = (id, direction) => {
     const project = projectFiles.find((item) => item.id === id)
     if (!project) return
+    setManualPlayback((current) => ({ ...current, [id]: false }))
+    setVideoPlaybackState((current) => ({ ...current, [id]: true }))
     setInfoSlides((current) => ({
       ...current,
       [id]: ((current[id] ?? 0) + direction + project.videos.length) % project.videos.length,
     }))
   }
 
-  const selectProjectVideo = (id, index, enableAudio = false) => {
+  const selectProjectVideo = (id, index) => {
     setInfoSlides((current) => ({ ...current, [id]: index }))
-    if (enableAudio) {
-      setVideoAudioEnabled((current) => ({ ...current, [id]: true }))
+    setManualPlayback((current) => ({ ...current, [id]: true }))
+    setVideoPlaybackState((current) => ({ ...current, [id]: true }))
+  }
+
+  const toggleMainVideoPlayback = (id) => {
+    const video = projectVideoRefs.current[id]
+    if (!video) return
+    if (video.paused) {
+      void video.play()
+      setVideoPlaybackState((current) => ({ ...current, [id]: true }))
+    } else {
+      video.pause()
+      setVideoPlaybackState((current) => ({ ...current, [id]: false }))
     }
+  }
+
+  const changeVideoVolume = (id, value) => {
+    const volume = Number(value)
+    const video = projectVideoRefs.current[id]
+    if (video) {
+      video.volume = volume
+      video.muted = volume === 0
+    }
+    setVideoVolumes((current) => ({ ...current, [id]: volume }))
   }
 
   const focusProject = (id) => {
@@ -337,7 +366,9 @@ function ProjectDesktop() {
         if (!project) return null
         const infoSlide = infoSlides[projectId] ?? 0
         const currentSlide = project.videos[infoSlide]
-        const audioEnabled = videoAudioEnabled[projectId] ?? false
+        const isManualMode = manualPlayback[projectId] ?? false
+        const isPlaying = videoPlaybackState[projectId] ?? true
+        const volume = videoVolumes[projectId] ?? 1
         const position = windowPositions[projectId] ?? { x: 0, y: 0 }
 
         return (
@@ -477,18 +508,59 @@ function ProjectDesktop() {
                 <span className="carousel-project-mark">{project.name}</span>
                 <video
                   key={currentSlide?.src}
+                  ref={(node) => {
+                    if (node) projectVideoRefs.current[project.id] = node
+                  }}
                   src={currentSlide?.src}
                   autoPlay
-                  loop
-                  muted={!audioEnabled}
-                  controls={audioEnabled}
+                  loop={!isManualMode}
+                  muted={!isManualMode || volume === 0}
+                  controls={false}
                   playsInline
                   preload="metadata"
+                  onLoadedMetadata={(event) => {
+                    event.currentTarget.volume = volume
+                    if (isManualMode) {
+                      void event.currentTarget.play()
+                    }
+                  }}
+                  onPlay={() => setVideoPlaybackState((current) => ({ ...current, [project.id]: true }))}
+                  onPause={() => setVideoPlaybackState((current) => ({ ...current, [project.id]: false }))}
+                  onEnded={() => {
+                    setManualPlayback((current) => ({ ...current, [project.id]: false }))
+                    setVideoPlaybackState((current) => ({ ...current, [project.id]: true }))
+                    setInfoSlides((current) => ({
+                      ...current,
+                      [project.id]: ((current[project.id] ?? 0) + 1) % project.videos.length,
+                    }))
+                  }}
                 />
+                <button
+                  type="button"
+                  className={`carousel-stage-toggle${isManualMode ? ' is-manual' : ''}`}
+                  onClick={() => isManualMode && toggleMainVideoPlayback(project.id)}
+                  aria-label={isManualMode ? (isPlaying ? 'Mettre en pause la vidéo' : 'Lire la vidéo') : 'Carrousel automatique en cours'}
+                >
+                  {isManualMode ? <span>{isPlaying ? 'pause' : 'play'}</span> : null}
+                </button>
                 <div className="carousel-media-overlay">
                   <span>MOTION</span>
                   <strong>{currentSlide?.label}</strong>
                 </div>
+                {isManualMode ? (
+                  <div className="carousel-volume" aria-label="Réglage du volume">
+                    <span>sound</span>
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      value={volume}
+                      onChange={(event) => changeVideoVolume(project.id, event.target.value)}
+                      aria-label="Volume de la vidéo"
+                    />
+                  </div>
+                ) : null}
                 <button type="button" className="carousel-arrow carousel-prev" onClick={() => moveInfoSlide(project.id, -1)} aria-label="Média précédent">‹</button>
                 <button type="button" className="carousel-arrow carousel-next" onClick={() => moveInfoSlide(project.id, 1)} aria-label="Média suivant">›</button>
               </div>
@@ -502,7 +574,7 @@ function ProjectDesktop() {
                     type="button"
                     key={media.src}
                     className={`carousel-video-thumb${infoSlide === index ? ' is-active' : ''}`}
-                    onClick={() => selectProjectVideo(project.id, index, true)}
+                    onClick={() => selectProjectVideo(project.id, index)}
                     aria-label={`Lire ${media.label} avec le son`}
                   >
                     <video
@@ -1157,4 +1229,3 @@ export default function App() {
     </main>
   )
 }
-
