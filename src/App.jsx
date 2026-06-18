@@ -642,22 +642,18 @@ En quoi je me démarque ? Ma soif d'apprendre et d’expérience est ce qui m'an
 Comment je fais pour ne pas me lasser de mon métier ? J’ai trouvé le secteur d’activité qui stimule les 4 hormones du bonheur simultanément : c’est ce qui rends la source de ma motivation inépuisable.`,
 }
 
-function VideoRail({ active }) {
+function VideoRail() {
   const videoRefs = useRef([])
 
   useEffect(() => {
     videoRefs.current.forEach((video) => {
       if (!video) return
-      if (active) {
-        video.play().catch(() => {})
-      } else {
-        video.pause()
-      }
+      video.play().catch(() => {})
     })
-  }, [active])
+  }, [])
 
   return (
-    <aside className={`video-rail${active ? '' : ' is-paused'}`} aria-label="Selected video work">
+    <aside className="video-rail" aria-label="Selected video work">
       <div className="video-track">
         {videos.map((video, index) => (
           <article className="video-card" key={`${video.src}-${index}`}>
@@ -918,7 +914,7 @@ export default function App() {
           <em>portfolio</em>
         </h1>
 
-        <VideoRail active={heroVisible} />
+        <VideoRail />
 
         <div className="hero-bottom">
           <span>Portfolio · 2026</span>

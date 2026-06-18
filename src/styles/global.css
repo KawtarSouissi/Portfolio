@@ -2180,15 +2180,7 @@ a {
   display: grid;
   gap: 12px;
   padding: 12px;
-  animation: video-scroll 24s linear infinite;
-}
-
-.video-rail.is-paused .video-track {
-  animation-play-state: paused;
-}
-
-.video-rail.is-paused video {
-  visibility: hidden;
+  animation: video-scroll 18s linear infinite;
 }
 
 .video-card {
