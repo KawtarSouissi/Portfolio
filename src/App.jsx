@@ -98,6 +98,7 @@ const staticAssetsToPreload = [
 function ProjectDesktop() {
   const [openFolders, setOpenFolders] = useState([])
   const [infoSlides, setInfoSlides] = useState({})
+  const [videoAudioEnabled, setVideoAudioEnabled] = useState({})
   const [windowPositions, setWindowPositions] = useState({})
   const dragState = useRef(null)
   const [cvOpen, setCvOpen] = useState(false)
@@ -123,6 +124,7 @@ function ProjectDesktop() {
   const openProject = (id) => {
     setOpenFolders((current) => [...current.filter((item) => item !== id), id])
     setInfoSlides((current) => ({ ...current, [id]: current[id] ?? 0 }))
+    setVideoAudioEnabled((current) => ({ ...current, [id]: current[id] ?? false }))
     setWindowPositions((current) => ({
       ...current,
       [id]: current[id] ?? {
@@ -152,6 +154,13 @@ function ProjectDesktop() {
       ...current,
       [id]: ((current[id] ?? 0) + direction + project.videos.length) % project.videos.length,
     }))
+  }
+
+  const selectProjectVideo = (id, index, enableAudio = false) => {
+    setInfoSlides((current) => ({ ...current, [id]: index }))
+    if (enableAudio) {
+      setVideoAudioEnabled((current) => ({ ...current, [id]: true }))
+    }
   }
 
   const focusProject = (id) => {
@@ -328,6 +337,7 @@ function ProjectDesktop() {
         if (!project) return null
         const infoSlide = infoSlides[projectId] ?? 0
         const currentSlide = project.videos[infoSlide]
+        const audioEnabled = videoAudioEnabled[projectId] ?? false
         const position = windowPositions[projectId] ?? { x: 0, y: 0 }
 
         return (
@@ -470,7 +480,8 @@ function ProjectDesktop() {
                   src={currentSlide?.src}
                   autoPlay
                   loop
-                  muted
+                  muted={!audioEnabled}
+                  controls={audioEnabled}
                   playsInline
                   preload="metadata"
                 />
@@ -485,15 +496,25 @@ function ProjectDesktop() {
                 <span>Selected work · {project.name}</span>
                 <small>{String(infoSlide + 1).padStart(2, '0')} / {String(project.videos.length).padStart(2, '0')}</small>
               </div>
-              <div className="carousel-dots" aria-label="Choisir un média">
+              <div className="carousel-video-strip" aria-label={`Choisir une vidéo pour ${project.name}`}>
                 {project.videos.map((media, index) => (
                   <button
                     type="button"
                     key={media.src}
-                    className={infoSlide === index ? 'is-active' : ''}
-                    onClick={() => setInfoSlides((current) => ({ ...current, [project.id]: index }))}
-                    aria-label={`Afficher le média ${index + 1}`}
-                  />
+                    className={`carousel-video-thumb${infoSlide === index ? ' is-active' : ''}`}
+                    onClick={() => selectProjectVideo(project.id, index, true)}
+                    aria-label={`Lire ${media.label} avec le son`}
+                  >
+                    <video
+                      src={media.src}
+                      muted
+                      loop
+                      autoPlay
+                      playsInline
+                      preload="metadata"
+                    />
+                    <span>{media.label}</span>
+                  </button>
                 ))}
               </div>
             </div>
@@ -1136,5 +1157,4 @@ export default function App() {
     </main>
   )
 }
-
 
