@@ -439,6 +439,38 @@ a {
   padding: clamp(25px, 4vw, 52px);
 }
 
+.folder-preview {
+  position: relative;
+  width: 74px;
+  height: 54px;
+  display: block;
+  border-radius: 7px 7px 10px 10px;
+  background: linear-gradient(180deg, #7bc8ff 0 12%, #3a9cf3 13% 100%);
+  box-shadow: 0 10px 16px rgba(20, 52, 84, .16);
+}
+
+.folder-preview::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 5px;
+  width: 28px;
+  height: 10px;
+  border-radius: 5px 5px 0 0;
+  background: #8dd5ff;
+}
+
+.project-subfolder {
+  gap: 10px;
+}
+
+.project-subfolder small {
+  max-width: 110px;
+  color: #34292d;
+  font: 700 10px/1.25 'DM Sans', sans-serif;
+  text-align: center;
+}
+
 .media-file,
 .exe-file {
   display: grid;
@@ -547,6 +579,69 @@ a {
   box-shadow: 0 10px 20px rgba(36, 21, 26, .21);
   color: #fff;
   font: 400 37px/1 'Italiana', serif;
+}
+
+.project-exe-entry {
+  position: relative;
+  gap: 10px;
+  min-height: 164px;
+}
+
+.project-exe-entry > span {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 22px;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--project-color), white 8%), #25151a);
+}
+
+.project-exe-entry > span img {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, .15));
+}
+
+.project-exe-entry small,
+.project-exe-entry em {
+  position: relative;
+  z-index: 2;
+}
+
+.project-exe-entry small {
+  color: #2f2528;
+  font: 700 9px/1.2 'DM Sans', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.project-exe-entry em {
+  color: var(--project-color);
+  font: 400 18px/1 'Gochi Hand', cursive;
+}
+
+.exe-arrow {
+  position: absolute;
+  z-index: 1;
+  color: var(--project-color);
+  font: 400 28px/1 'Gochi Hand', cursive;
+  pointer-events: none;
+}
+
+.exe-arrow-top {
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.exe-arrow-left {
+  top: 38px;
+  left: 0;
+}
+
+.exe-arrow-right {
+  top: 38px;
+  right: 0;
 }
 
 .info-content {

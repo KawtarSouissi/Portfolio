@@ -36,6 +36,7 @@ const projectFiles = [
       tiktok: 'https://www.tiktok.com/@ksmodesty',
       handle: '@ksmodesty',
     },
+    folders: ['Contenu promotionnel', 'Contenu Trendy', 'Teaser', 'Vlog'],
     ...makeProjectMedia('ks-modesty', 15, 4),
   },
   {
@@ -55,6 +56,7 @@ const projectFiles = [
       tiktok: 'https://www.tiktok.com/@naklob3da',
       handle: '@naklob3da',
     },
+    folders: ['Découvertes', 'Dégustation face cam', 'Contenu trendy'],
     ...makeProjectMedia('naklo-b3da', 10, 8),
   },
   {
@@ -74,6 +76,7 @@ const projectFiles = [
       tiktok: 'https://www.tiktok.com/@riwaya_prod',
       handle: '@riwaya_prod',
     },
+    folders: ['Event recap', 'Backstage', 'Storytelling'],
     ...makeProjectMedia('RIWAYA', 13, 7),
   },
 ]
@@ -97,6 +100,7 @@ const staticAssetsToPreload = [
 
 function ProjectDesktop() {
   const [openFolders, setOpenFolders] = useState([])
+  const [openCases, setOpenCases] = useState([])
   const [infoSlides, setInfoSlides] = useState({})
   const [manualPlayback, setManualPlayback] = useState({})
   const [videoPlaybackState, setVideoPlaybackState] = useState({})
@@ -127,6 +131,10 @@ function ProjectDesktop() {
 
   const openProject = (id) => {
     setOpenFolders((current) => [...current.filter((item) => item !== id), id])
+  }
+
+  const openProjectCase = (id) => {
+    setOpenCases((current) => [...current.filter((item) => item !== id), id])
     setInfoSlides((current) => ({ ...current, [id]: current[id] ?? 0 }))
     setManualPlayback((current) => ({ ...current, [id]: current[id] ?? false }))
     setVideoPlaybackState((current) => ({ ...current, [id]: current[id] ?? true }))
@@ -142,6 +150,10 @@ function ProjectDesktop() {
 
   const closeFolder = (id) => {
     setOpenFolders((current) => current.filter((item) => item !== id))
+  }
+
+  const closeCase = (id) => {
+    setOpenCases((current) => current.filter((item) => item !== id))
   }
 
   const openSocialWindow = (projectId, platform) => {
@@ -193,7 +205,7 @@ function ProjectDesktop() {
   }
 
   const focusProject = (id) => {
-    setOpenFolders((current) => [...current.filter((item) => item !== id), id])
+    setOpenCases((current) => [...current.filter((item) => item !== id), id])
   }
 
   useEffect(() => {
@@ -364,6 +376,80 @@ function ProjectDesktop() {
       {openFolders.map((projectId, windowIndex) => {
         const project = projectFiles.find((item) => item.id === projectId)
         if (!project) return null
+
+        return (
+          <div
+            className="project-window"
+            key={`folder-${project.id}`}
+            style={{
+              left: `calc(50% + ${(windowIndex - 1) * 56}px)`,
+              top: `${17 + windowIndex * 3}%`,
+              zIndex: 20 + windowIndex,
+            }}
+          >
+            <div className="window-bar">
+              <div className="window-controls">
+                <button type="button" onClick={() => closeFolder(project.id)} aria-label="Fermer le dossier" />
+                <i />
+                <i />
+              </div>
+              <span>{project.folder}</span>
+            </div>
+            <div className="window-toolbar">
+              <button type="button" onClick={() => closeFolder(project.id)} aria-label="Retour">‹</button>
+              <strong>{project.name}</strong>
+              <small>{project.folders.length + 1} éléments</small>
+            </div>
+            <div className="folder-content">
+              <aside className="folder-sidebar">
+                <div>
+                  <strong>Projet</strong>
+                  <p>{project.role}</p>
+                </div>
+                <div>
+                  <strong>Contenu</strong>
+                  <p>{project.summary}</p>
+                </div>
+              </aside>
+              <div className="project-files">
+                <button
+                  type="button"
+                  className="exe-file project-exe-entry"
+                  onClick={() => openProjectCase(project.id)}
+                  style={{ '--project-color': project.color }}
+                >
+                  <span>
+                    <img src={project.logo} alt="" />
+                  </span>
+                  <b className="exe-arrow exe-arrow-top">↓</b>
+                  <b className="exe-arrow exe-arrow-left">→</b>
+                  <b className="exe-arrow exe-arrow-right">←</b>
+                  <em>Clique ici</em>
+                  <small>{project.folder}.exe</small>
+                </button>
+
+                {project.folders.map((folderName) => (
+                  <button
+                    type="button"
+                    className="media-file project-subfolder"
+                    key={`${project.id}-${folderName}`}
+                    style={{ '--project-color': project.color, '--project-accent': project.accent }}
+                  >
+                    <span className="folder-preview" aria-hidden="true">
+                      <i />
+                    </span>
+                    <small>{folderName}</small>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )
+      })}
+
+      {openCases.map((projectId, windowIndex) => {
+        const project = projectFiles.find((item) => item.id === projectId)
+        if (!project) return null
         const infoSlide = infoSlides[projectId] ?? 0
         const currentSlide = project.videos[infoSlide]
         const isManualMode = manualPlayback[projectId] ?? false
@@ -385,7 +471,7 @@ function ProjectDesktop() {
         >
           <div className="window-bar" onPointerDown={(event) => startMoving(event, project.id)}>
             <div className="window-controls">
-              <button type="button" onClick={() => closeFolder(project.id)} aria-label="Fermer le projet" />
+              <button type="button" onClick={() => closeCase(project.id)} aria-label="Fermer le projet" />
               <i />
               <i />
             </div>
@@ -414,11 +500,11 @@ function ProjectDesktop() {
                   <img className="naklo-info-logo" src={asset("/projects/naklo-b3da/NAKBLO_LOGO.png")} alt="Naklo B3da w i7en Lah" />
                   <section className="naklo-info-text">
                     <h4>ORIGINE <em>de notre nom</em></h4>
-                    <p>J’AI DÉCIDÉ DE NOMMER MON COMPTE “NAKLO B3DA W I7EN LAH”, UNE EXPRESSION TIRÉE TOUT DROIT DU DIALECTE MAROCAIN, ELLE SIGNIFIE “MANGEONS D’ABORD, DIEU S’OCCUPERA DU RESTE”. C’EST UNE EXPRESSION CÉLÈBRE DANS LA CULTURE MAROCAINE, ELLE PERMETS DE RECENTRER LE SUJET SUR LE PLUS IMPORTANT; LA SIMPLICITÉ DE PARTAGER UN MOMENT DE CONVIVIALITÉ AUTOUR D’UN BON PLAT, ET DE LAISSER LE RESTE AUX MAINS DE DIEU.</p>
+                    <p>J’ai décidé de nommer mon compte “Naklo B3da W I7en Lah”, une expression tirée tout droit du dialecte marocain. Elle signifie “Mangeons d’abord, Dieu s’occupera du reste”. C’est une expression célèbre dans la culture marocaine. Elle permet de recentrer le sujet sur le plus important : la simplicité de partager un moment de convivialité autour d’un bon plat, et de laisser le reste aux mains de Dieu.</p>
                   </section>
                   <section className="naklo-info-text">
                     <h4>CONCEPT &amp; OBJECTIF <em>de ce projet</em></h4>
-                    <p>ÉTANT FRANCO-MAROCAINE ET GRANDE ADEPTE DE TOUT CE QUI EST RELIÉ DE PRÈS OU DE LOIN À LA NOURRITURE, JE ME DEVAIS DE CRÉER UN CONCEPT QUI PERMETTRAIS À MA COMMUNAUTÉ DE DÉCOUVRIR DE NOUVELLES SPÉCIALITÉS CULINAIRES ET ACTIVITÉS EXISTANTES EN FRANCE ET AU MAROC. OBJECTIF ? PARTAGER UN UNIVERS QUI ME PASSIONNE; PROMOUVOIR L’INCLUSIVITÉ ET L’ACCESSIBILITÉ À TRAVERS LA DÉCOUVERTE DE LIEUX QUI ONT POUR CIBLES TOUT TYPE DE PROFIL CLIENTS. MA SŒUR M’A JOINT DANS CE MAGNIFIQUE PROJET : BIENVENUS DANS NOTRE UNIVERS.</p>
+                    <p>Étant franco-marocaine et grande adepte de tout ce qui est relié de près ou de loin à la nourriture, je me devais de créer un concept qui permettrait à ma communauté de découvrir de nouvelles spécialités culinaires et activités existantes en France et au Maroc. Objectif ? Partager un univers qui me passionne, promouvoir l’inclusivité et l’accessibilité à travers la découverte de lieux qui ont pour cibles tout type de profil client. Ma sœur m’a rejointe dans ce magnifique projet : bienvenue dans notre univers.</p>
                   </section>
                 </>
               ) : project.id === 'ks-modesty' ? (
@@ -426,7 +512,7 @@ function ProjectDesktop() {
                   <img className="ks-info-logo" src={asset("/projects/KSMODESTY/KS_logo.png")} alt="KS Modesty" />
                   <section className="ks-info-text">
                     <h4>CONCEPT &amp; OBJECTIF <em>de ce projet</em></h4>
-                    <p>J’AI DÉVELOPPÉ UN PROJET QUI ME RESSEMBLE ET QUI RÉPONDAIT À UN RÉEL BESOIN SUR LE MARCHÉ. KS MODESTY EST UNE MARQUE SPÉCIALISÉE DANS LES VOILES D’EXCEPTION, ET SE DISTINGUE PAR UNE APPROCHE NOVATRICE, LE MESSAGE QUE JE SOUHAITE PASSER EST QU’UNE FEMME QUI FAIS LE CHOIX VESTIMENTAIRE DU VOILE, NE DOIT PAS SE PERDRE DANS LES ATTENTES DE LA SOCIÉTÉ À CE QU’ELLE SE VÊTISSE DE MANIÈRE MONOTONE ET SANS EXTRAVAGANCE. BREF J’EN AI DIS ASSEZ.</p>
+                    <p>J’ai développé un projet qui me ressemble et qui répondait à un réel besoin sur le marché. KS Modesty est une marque spécialisée dans les voiles d’exception, et se distingue par une approche novatrice. Le message que je souhaite transmettre est qu’une femme qui fait le choix vestimentaire du voile ne doit pas se perdre dans les attentes de la société ni se vêtir de manière monotone et sans extravagance. Bref, j’en ai dit assez.</p>
                   </section>
                 </>
               ) : project.id === 'riwaya' ? (
@@ -438,7 +524,7 @@ function ProjectDesktop() {
                   </section>
                   <section className="riwaya-info-text">
                     <h4>CONCEPT &amp; OBJECTIF <em>de ce projet</em></h4>
-                    <p>J’AI LANCÉ CE COMPTE DE CRÉATION DE CONTENU ÉVÉNEMENTIEL PARCE QU’IL RÉUNIT TOUT CE QUI ME PASSIONNE : L’ESTHÉTIQUE, LE SENS DU DÉTAIL, LA CRÉATION DE CONTENU ET SURTOUT L’ÉMOTION HUMAINE. J’AIME CAPTURER CES INSTANTS QUI NE SE REPRODUIRONT JAMAIS DEUX FOIS, METTRE EN LUMIÈRE LA BEAUTÉ D’UN MOMENT, D’UN LIEU OU D’UNE HISTOIRE À TRAVERS MON REGARD. CHAQUE ÉVÉNEMENT EST UNE OCCASION DE RACONTER QUELQUE CHOSE D’UNIQUE, DE TRANSFORMER DES SOUVENIRS EN IMAGES ET DE FAIRE RESSENTIR AUX AUTRES UNE ATMOSPHÈRE BIEN PRÉCISE.</p>
+                    <p>J’ai lancé ce compte de création de contenu événementiel parce qu’il réunit tout ce qui me passionne : l’esthétique, le sens du détail, la création de contenu et surtout l’émotion humaine. J’aime capturer ces instants qui ne se reproduiront jamais deux fois, mettre en lumière la beauté d’un moment, d’un lieu ou d’une histoire à travers mon regard. Chaque événement est une occasion de raconter quelque chose d’unique, de transformer des souvenirs en images et de faire ressentir aux autres une atmosphère bien précise.</p>
                   </section>
                 </>
               ) : (
