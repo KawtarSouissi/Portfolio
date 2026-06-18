@@ -644,6 +644,7 @@ Comment je fais pour ne pas me lasser de mon métier ? J’ai trouvé le secteur
 
 function VideoRail() {
   const videoRefs = useRef([])
+  const railVideos = [...videos, ...videos]
 
   useEffect(() => {
     videoRefs.current.forEach((video) => {
@@ -655,7 +656,7 @@ function VideoRail() {
   return (
     <aside className="video-rail" aria-label="Selected video work">
       <div className="video-track">
-        {videos.map((video, index) => (
+        {railVideos.map((video, index) => (
           <article className="video-card" key={`${video.src}-${index}`}>
             <video
               ref={(element) => { videoRefs.current[index] = element }}
@@ -665,6 +666,10 @@ function VideoRail() {
               playsInline
               preload="metadata"
               poster={asset("/hero.png")}
+              onLoadedMetadata={(event) => {
+                if (!video.src.endsWith('video-05-web.mp4')) return
+                event.currentTarget.currentTime = 65
+              }}
             >
               <source src={video.src} type="video/mp4" />
             </video>

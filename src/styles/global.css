@@ -2212,7 +2212,7 @@ a {
 
 @keyframes video-scroll {
   to {
-    transform: translateY(calc(-66.666% + 30vh));
+    transform: translateY(-50%);
   }
 }
 
@@ -3644,7 +3644,7 @@ a {
 
   @keyframes video-scroll-mobile {
     to {
-      transform: translateX(calc(-66.666% + 120px));
+      transform: translateX(-50%);
     }
   }
 
