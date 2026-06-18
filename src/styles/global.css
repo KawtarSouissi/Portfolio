@@ -585,6 +585,7 @@ a {
   position: relative;
   gap: 8px;
   min-height: 176px;
+  animation: exe-pulse 1.8s ease-in-out infinite;
 }
 
 .project-exe-entry > span {
@@ -626,54 +627,17 @@ a {
   font: 400 20px/1 'Gochi Hand', cursive;
 }
 
-.exe-arrow {
-  position: absolute;
-  z-index: 1;
-  pointer-events: none;
-  overflow: visible;
-  animation: exe-arrow-float 1.7s ease-in-out infinite;
-}
-
-.exe-arrow path {
-  fill: none;
-  stroke: #9d1027;
-  stroke-width: 4.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 2px 4px rgba(157, 16, 39, .12));
-}
-
-@keyframes exe-arrow-float {
+@keyframes exe-pulse {
   0%, 100% {
-    transform: translate3d(0, 0, 0) rotate(0deg);
+    transform: scale(1);
+    opacity: 1;
+    filter: none;
   }
   50% {
-    transform: translate3d(0, -4px, 0) rotate(-2deg);
+    transform: scale(1.035);
+    opacity: .82;
+    filter: drop-shadow(0 0 16px rgba(140, 18, 39, .14));
   }
-}
-
-.exe-arrow-top {
-  top: -4px;
-  left: 50%;
-  width: 92px;
-  height: 50px;
-  margin-left: -6px;
-}
-
-.exe-arrow-left {
-  top: 37px;
-  left: -14px;
-  width: 84px;
-  height: 52px;
-  animation-delay: .15s;
-}
-
-.exe-arrow-right {
-  top: 38px;
-  right: -14px;
-  width: 84px;
-  height: 52px;
-  animation-delay: .3s;
 }
 
 .info-content {
