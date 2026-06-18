@@ -421,10 +421,22 @@ function ProjectDesktop() {
                   <span>
                     <img src={project.logo} alt="" />
                   </span>
-                  <b className="exe-arrow exe-arrow-top">↓</b>
-                  <b className="exe-arrow exe-arrow-left">→</b>
-                  <b className="exe-arrow exe-arrow-right">←</b>
-                  <em>Clique ici</em>
+                  <svg className="exe-arrow exe-arrow-top" viewBox="0 0 120 70" aria-hidden="true">
+                    <path d="M8 14 C38 8, 72 10, 98 28" />
+                    <path d="M87 20 C96 24, 102 28, 108 36" />
+                    <path d="M90 32 C98 31, 105 33, 113 39" />
+                  </svg>
+                  <svg className="exe-arrow exe-arrow-left" viewBox="0 0 120 70" aria-hidden="true">
+                    <path d="M104 14 C72 18, 42 26, 18 42" />
+                    <path d="M29 32 C23 38, 18 44, 11 50" />
+                    <path d="M29 52 C21 49, 14 48, 6 47" />
+                  </svg>
+                  <svg className="exe-arrow exe-arrow-right" viewBox="0 0 120 70" aria-hidden="true">
+                    <path d="M14 16 C44 18, 76 24, 103 43" />
+                    <path d="M92 34 C99 39, 105 44, 112 52" />
+                    <path d="M89 54 C98 51, 105 51, 114 52" />
+                  </svg>
+                  <em>open me</em>
                   <small>{project.folder}.exe</small>
                 </button>
 
@@ -629,13 +641,8 @@ function ProjectDesktop() {
                 >
                   {isManualMode ? <span>{isPlaying ? 'pause' : 'play'}</span> : null}
                 </button>
-                <div className="carousel-media-overlay">
-                  <span>MOTION</span>
-                  <strong>{currentSlide?.label}</strong>
-                </div>
                 {isManualMode ? (
                   <div className="carousel-volume" aria-label="Réglage du volume">
-                    <span>sound</span>
                     <input
                       type="range"
                       min="0"

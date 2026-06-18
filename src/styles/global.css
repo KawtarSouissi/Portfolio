@@ -583,23 +583,29 @@ a {
 
 .project-exe-entry {
   position: relative;
-  gap: 10px;
-  min-height: 164px;
+  gap: 8px;
+  min-height: 176px;
 }
 
 .project-exe-entry > span {
   position: relative;
-  width: 88px;
-  height: 88px;
-  border-radius: 22px;
-  background: linear-gradient(145deg, color-mix(in srgb, var(--project-color), white 8%), #25151a);
+  width: 108px;
+  height: 108px;
+  border: 1px solid rgba(74, 47, 52, .12);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, .92), rgba(255, 255, 255, .28) 30%, transparent 48%),
+    linear-gradient(155deg, #fffdfc, #eee7e4 65%, #e4dad6);
+  box-shadow:
+    0 18px 34px rgba(38, 24, 29, .14),
+    inset 0 1px rgba(255, 255, 255, .96);
 }
 
 .project-exe-entry > span img {
-  width: 58px;
-  height: 58px;
+  width: 72px;
+  height: 72px;
   object-fit: contain;
-  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, .15));
+  filter: drop-shadow(0 6px 10px rgba(44, 20, 26, .16));
 }
 
 .project-exe-entry small,
@@ -616,32 +622,58 @@ a {
 }
 
 .project-exe-entry em {
-  color: var(--project-color);
-  font: 400 18px/1 'Gochi Hand', cursive;
+  color: #8c1227;
+  font: 400 20px/1 'Gochi Hand', cursive;
 }
 
 .exe-arrow {
   position: absolute;
   z-index: 1;
-  color: var(--project-color);
-  font: 400 28px/1 'Gochi Hand', cursive;
   pointer-events: none;
+  overflow: visible;
+  animation: exe-arrow-float 1.7s ease-in-out infinite;
+}
+
+.exe-arrow path {
+  fill: none;
+  stroke: #9d1027;
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 2px 4px rgba(157, 16, 39, .12));
+}
+
+@keyframes exe-arrow-float {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -4px, 0) rotate(-2deg);
+  }
 }
 
 .exe-arrow-top {
-  top: -2px;
+  top: -4px;
   left: 50%;
-  transform: translateX(-50%);
+  width: 92px;
+  height: 50px;
+  margin-left: -6px;
 }
 
 .exe-arrow-left {
-  top: 38px;
-  left: 0;
+  top: 37px;
+  left: -14px;
+  width: 84px;
+  height: 52px;
+  animation-delay: .15s;
 }
 
 .exe-arrow-right {
   top: 38px;
-  right: 0;
+  right: -14px;
+  width: 84px;
+  height: 52px;
+  animation-delay: .3s;
 }
 
 .info-content {
@@ -1748,29 +1780,6 @@ a {
   backdrop-filter: blur(12px);
 }
 
-.carousel-media-overlay {
-  position: absolute;
-  z-index: 3;
-  right: 22px;
-  bottom: 19px;
-  left: 22px;
-  display: grid;
-  gap: 5px;
-  color: #fff;
-  pointer-events: none;
-}
-
-.carousel-media-overlay span {
-  font-size: 7px;
-  font-weight: 700;
-  letter-spacing: .18em;
-}
-
-.carousel-media-overlay strong {
-  font: 500 clamp(18px, 2vw, 29px)/1.05 -apple-system, BlinkMacSystemFont, sans-serif;
-  letter-spacing: -.035em;
-}
-
 .carousel-stage-toggle {
   position: absolute;
   inset: 0;
@@ -1811,29 +1820,35 @@ a {
 .carousel-volume {
   position: absolute;
   z-index: 4;
-  left: 22px;
-  bottom: 20px;
-  display: inline-flex;
+  top: 50%;
+  right: 16px;
+  display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
+  justify-content: center;
+  width: 46px;
+  height: 154px;
+  padding: 12px 0;
   border: 1px solid rgba(255, 255, 255, .2);
   border-radius: 999px;
   background: rgba(17, 10, 13, .38);
-  color: #fff;
   backdrop-filter: blur(12px);
+  opacity: 0;
+  transform: translateY(-50%) translateX(12px);
+  transition: opacity 180ms ease, transform 180ms ease;
 }
 
-.carousel-volume span {
-  font: 700 8px/1 'DM Sans', sans-serif;
-  letter-spacing: .16em;
-  text-transform: uppercase;
+.case-study-window .info-carousel-stage:hover .carousel-volume,
+.case-study-window .info-carousel-stage:focus-within .carousel-volume {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
 }
 
 .carousel-volume input[type='range'] {
-  width: 120px;
+  width: 108px;
   appearance: none;
   height: 4px;
+  transform: rotate(-90deg);
+  transform-origin: center;
   border-radius: 999px;
   background: rgba(255, 255, 255, .24);
   outline: none;
