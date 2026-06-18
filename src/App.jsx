@@ -113,11 +113,11 @@ function ProjectDesktop() {
   const [socialWindows] = useState([])
 
   useEffect(() => {
-    if (!openFolders.length) return undefined
+    if (!openCases.length) return undefined
     const timer = window.setInterval(() => {
       setInfoSlides((current) => {
         const next = { ...current }
-        openFolders.forEach((id) => {
+        openCases.forEach((id) => {
           if (manualPlayback[id]) return
           const item = projectFiles.find((project) => project.id === id)
           if (item) next[id] = ((current[id] ?? 0) + 1) % item.videos.length
@@ -127,7 +127,7 @@ function ProjectDesktop() {
     }, 4200)
 
     return () => window.clearInterval(timer)
-  }, [manualPlayback, openFolders])
+  }, [manualPlayback, openCases])
 
   const openProject = (id) => {
     setOpenFolders((current) => [...current.filter((item) => item !== id), id])
@@ -590,7 +590,6 @@ function ProjectDesktop() {
                 ) : null}
                 <span className="carousel-project-mark">{project.name}</span>
                 <video
-                  key={currentSlide?.src}
                   ref={(node) => {
                     if (node) projectVideoRefs.current[project.id] = node
                   }}
@@ -600,11 +599,13 @@ function ProjectDesktop() {
                   muted={!isManualMode || volume === 0}
                   controls={false}
                   playsInline
-                  preload="metadata"
+                  preload="auto"
                   onLoadedMetadata={(event) => {
                     event.currentTarget.volume = volume
                     if (isManualMode) {
                       void event.currentTarget.play()
+                    } else {
+                      void event.currentTarget.play().catch(() => {})
                     }
                   }}
                   onPlay={() => setVideoPlaybackState((current) => ({ ...current, [project.id]: true }))}
@@ -657,11 +658,20 @@ function ProjectDesktop() {
                   >
                     <video
                       src={media.src}
+                      poster={project.images[index % project.images.length]?.src}
                       muted
-                      loop
-                      autoPlay
                       playsInline
-                      preload="metadata"
+                      preload="none"
+                      onMouseEnter={(event) => {
+                        const video = event.currentTarget
+                        video.currentTime = 0
+                        void video.play().catch(() => {})
+                      }}
+                      onMouseLeave={(event) => {
+                        const video = event.currentTarget
+                        video.pause()
+                        video.currentTime = 0
+                      }}
                     />
                     <span>{media.label}</span>
                   </button>
