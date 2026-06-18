@@ -922,8 +922,6 @@ export default function App() {
         <VideoRail />
 
         <div className="hero-bottom">
-          <span>Portfolio · 2026</span>
-          <span>Move your cursor</span>
         </div>
       </section>
 
