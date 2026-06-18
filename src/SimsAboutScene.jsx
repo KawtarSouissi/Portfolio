@@ -119,17 +119,21 @@ function TraitModel({ trait, position, active, onSelect }) {
 function Emerald({ mobile }) {
   const group = useRef(null)
   const { scene } = useGLTF(EMERALD_FILE)
+  const { size } = useThree()
   const emerald = useMemo(() => normalizedClone(scene, 1.65), [scene])
+
+  const desktopX = THREE.MathUtils.clamp(4.9 + ((size.width / Math.max(size.height, 1)) - 1.48) * 1.05, 4.5, 5.95)
+  const desktopY = THREE.MathUtils.clamp(4.96 + ((size.height / Math.max(size.width, 1)) - .62) * .55, 4.7, 5.25)
 
   useFrame(({ clock }, delta) => {
     if (!group.current) return
     group.current.rotation.y += delta * 1.1
     group.current.rotation.z = Math.sin(clock.elapsedTime * .85) * .08
-    group.current.position.y = (mobile ? 3.55 : 5.05) + Math.sin(clock.elapsedTime * 1.55) * .14
+    group.current.position.y = (mobile ? 3.55 : desktopY) + Math.sin(clock.elapsedTime * 1.55) * .14
   })
 
   return (
-    <group ref={group} position={[mobile ? 1.35 : 5.6, mobile ? 3.55 : 5.05, .2]}>
+    <group ref={group} position={[mobile ? 1.35 : desktopX, mobile ? 3.55 : desktopY, .2]}>
       <primitive object={emerald} />
     </group>
   )

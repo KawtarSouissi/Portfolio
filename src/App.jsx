@@ -546,14 +546,13 @@ function ProjectDesktop() {
       })}
 
       <div className="desktop-dock" aria-label="Barre d'applications">
-        <span className="dock-finder">◐</span>
-        <span className="dock-ps">Ps</span>
-        <span className="dock-ai">Ai</span>
-        <span className="dock-video">▶</span>
-        <span className="dock-notes">▤</span>
-        <span className="dock-photos">✿</span>
+        <span className="dock-photopea">Pp</span>
+        <span className="dock-lightroom">Lr</span>
+        <span className="dock-captions">Cp</span>
+        <span className="dock-notion">N</span>
+        <span className="dock-capcut">Cc</span>
+        <span className="dock-tiktok">Tk</span>
         <span className="dock-instagram">◎</span>
-        <span className="dock-mail">✉</span>
         <i />
         <span className="dock-trash">⌫</span>
       </div>
@@ -623,6 +622,24 @@ const personalityTraits = [
   },
 ]
 
+const defaultAboutSummary = {
+  id: 'overview',
+  label: 'À propos de moi',
+  description: `Madame, Monsieur,
+
+Faites connaissances avec Kawtar, jeune femme de 23 ans en Mastère 2 Communication et Brand Content.
+
+OK, ça c’est la partie formelle, si je devais me décrire en quelques mots, je dirais que j’ai Gilles de la Tourette de la Comm !
+
+Je touche à tout : je crée ; j’imagine ; je filme ;
+je monte ; je pilote et bien sûr je CON. VER. TI.
+J’aspire à devenir Brand Content Strategist, un métier qui me correspond totalement de par mes connaissances acquises durant mon parcours professionnel, et de mes compétences.
+
+En quoi je me démarque ? Ma soif d'apprendre et d’expérience est ce qui m'anime dans tous les projets que j'entreprends, je m’engage dans des projet de communication par pure passion.
+
+Comment je fais pour ne pas me lasser de mon métier ? J’ai trouvé le secteur d’activité qui stimule les 4 hormones du bonheur simultanément : c’est ce qui rends la source de ma motivation inépuisable.`,
+}
+
 function VideoRail({ active }) {
   const videoRefs = useRef([])
 
@@ -676,7 +693,7 @@ export default function App() {
   const [loadEducationScene, setLoadEducationScene] = useState(true)
   const [educationVisible, setEducationVisible] = useState(false)
   const [ticketPrinted, setTicketPrinted] = useState(false)
-  const [selectedTrait, setSelectedTrait] = useState('amicale')
+  const [selectedTrait, setSelectedTrait] = useState(null)
   const [hoveredTrait, setHoveredTrait] = useState(null)
   const [noButtonPosition, setNoButtonPosition] = useState({ x: 0, y: 0 })
   const [contactOpen, setContactOpen] = useState(false)
@@ -685,7 +702,7 @@ export default function App() {
     email: '',
     message: '',
   })
-  const activeTrait = personalityTraits.find((trait) => trait.id === selectedTrait) ?? personalityTraits[0]
+  const activeTrait = personalityTraits.find((trait) => trait.id === selectedTrait) ?? defaultAboutSummary
 
   useEffect(() => {
     const projectAssets = projectFiles.flatMap((project) => [
@@ -836,8 +853,8 @@ export default function App() {
     if (!container) return
 
     const bounds = container.getBoundingClientRect()
-    const maxX = Math.min(Math.max(bounds.width * .16, 36), 110)
-    const maxY = Math.min(Math.max(bounds.height * .1, 24), 70)
+    const maxX = Math.min(Math.max(bounds.width * .28, 60), 180)
+    const maxY = Math.min(Math.max(bounds.height * .18, 34), 120)
     const nextX = (Math.random() - .5) * maxX * 2
     const nextY = (Math.random() - .5) * maxY * 2
 
@@ -875,7 +892,6 @@ export default function App() {
     <main className="portfolio-page">
       <section className="hero" id="home" ref={heroRef}>
         <header className="hero-nav">
-          <a className="brand" href="#home">Kawtar</a>
           <nav aria-label="Navigation principale">
             <a href="#work">Work</a>
             <a href="#projects">Projects</a>
@@ -885,21 +901,10 @@ export default function App() {
           </nav>
         </header>
 
-        <a
-          className="portrait-stage"
-          href="#about"
-          aria-label="Découvrir plus d'informations sur Kawtar"
-        >
+        <div className="portrait-stage" aria-hidden="true">
           <img className="portrait-blur" src={asset('/hero.png')} alt="Portrait de Kawtar" decoding="async" />
           <img className="portrait-focus" src={asset('/hero.png')} alt="" aria-hidden="true" decoding="async" />
-          <span className="portrait-cta" aria-hidden="true">
-            <span>Plus d&apos;info<br />sur moi</span>
-            <svg viewBox="0 0 150 110" role="presentation">
-              <path d="M8 18C46 7 93 20 112 49C124 67 115 83 91 87" />
-              <path d="M101 70C97 78 93 84 82 91C92 94 101 98 108 104" />
-            </svg>
-          </span>
-        </a>
+        </div>
 
         <h1
           className="hero-heading"
@@ -907,8 +912,8 @@ export default function App() {
           onPointerMove={moveHeading}
           onPointerLeave={resetHeading}
         >
-          <span>Portfolio</span>
-          <em>de Kawtar</em>
+          <span>Kawtar&apos;s</span>
+          <em>portfolio</em>
         </h1>
 
         <VideoRail active={heroVisible} />
@@ -954,7 +959,7 @@ export default function App() {
         </div>
 
         <article className="trait-description" key={activeTrait.id} aria-live="polite">
-          <h3>{activeTrait.label}</h3>
+          {selectedTrait ? <h3>{activeTrait.label}</h3> : null}
           <p>{activeTrait.description}</p>
         </article>
 
@@ -970,7 +975,7 @@ export default function App() {
               key={trait.id}
               aria-label={trait.label}
               aria-pressed={selectedTrait === trait.id}
-              onClick={() => setSelectedTrait(trait.id)}
+              onClick={() => setSelectedTrait((current) => (current === trait.id ? null : trait.id))}
               onPointerEnter={() => setHoveredTrait(trait.id)}
               onPointerLeave={() => setHoveredTrait(null)}
             />
@@ -1042,6 +1047,17 @@ export default function App() {
             </button>
           </div>
         </div>
+
+        <div className="education-bonuses" aria-label="Stages internationaux">
+          <article className="education-bonus education-bonus-maroc">
+            <strong>Stage Maroc</strong>
+            <span>Bon d&apos;achat</span>
+          </article>
+          <article className="education-bonus education-bonus-dubai">
+            <strong>Stage Dubaï</strong>
+            <span>Bon d&apos;achat</span>
+          </article>
+        </div>
       </section>
 
       <ProjectDesktop />
@@ -1050,8 +1066,7 @@ export default function App() {
         <div className={`convinced-card${contactOpen ? ' is-contact-open' : ''}`}>
           {!contactOpen ? (
             <>
-              <strong>ALORS..</strong>
-              <em>Convaincus ?</em>
+              <h2 className="convinced-question">Alors... convaincus ?</h2>
               <div className="convinced-actions">
                 <button type="button" className="convinced-yes" onClick={openContactPanel}>
                   Oui
