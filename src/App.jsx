@@ -564,6 +564,8 @@ const videos = [
   { src: asset('/videos/video-01-web.mp4') },
   { src: asset('/videos/video-02-web.mp4') },
   { src: asset('/videos/video-03-web.mp4') },
+  { src: asset('/videos/video-04.mp4') },
+  { src: asset('/videos/video-05.mp4') },
 ]
 
 const aboutLabels = [
