@@ -7,15 +7,33 @@ const AboutScene = lazy(() => import('./AboutScene'))
 const SimsAboutScene = lazy(() => import('./SimsAboutScene'))
 const EducationTeaScene = lazy(() => import('./EducationTeaScene'))
 
-const makeProjectMedia = (slug, imageCount, videoCount) => ({
+const makeLegacyProjectMedia = (slug, imageCount, videoCount) => ({
   images: Array.from({ length: imageCount }, (_, index) => ({
     src: asset(`/projects/${slug}/gallery-${index + 1}.png`),
     label: `Photo ${String(index + 1).padStart(2, '0')}`,
   })),
   videos: Array.from({ length: videoCount }, (_, index) => ({
     src: asset(`/projects/${slug}/reel-${index + 1}.mp4`),
+    poster: asset(`/projects/${slug}/thumb-${index + 1}.jpg`),
     label: `Reel ${String(index + 1).padStart(2, '0')}`,
   })),
+})
+
+const makeProjectImages = (slug, imageCount) => Array.from({ length: imageCount }, (_, index) => ({
+  src: asset(`/projects/${slug}/gallery-web/image-${index + 1}.jpg`),
+  label: `Photo ${String(index + 1).padStart(2, '0')}`,
+}))
+
+const makeProjectVideos = (slug, folder, videoCount) => Array.from({ length: videoCount }, (_, index) => ({
+  src: asset(`/projects/${slug}/${folder}/video-${index + 1}.mp4`),
+  poster: asset(`/projects/${slug}/${folder}/thumb-${index + 1}.jpg`),
+  label: `Video ${String(index + 1).padStart(2, '0')}`,
+}))
+
+const makeMediaFolder = (name, slug, folder, videoCount) => ({
+  name,
+  slug: folder,
+  videos: makeProjectVideos(slug, folder, videoCount),
 })
 
 const projectFiles = [
@@ -36,8 +54,13 @@ const projectFiles = [
       tiktok: 'https://www.tiktok.com/@ksmodesty',
       handle: '@ksmodesty',
     },
-    folders: ['Contenu promotionnel', 'Contenu Trendy', 'Teaser', 'Vlog'],
-    ...makeProjectMedia('ks-modesty', 15, 4),
+    folders: [
+      { name: 'Contenu promotionnel', slug: 'contenu-promotionnel', videos: [] },
+      { name: 'Contenu Trendy', slug: 'contenu-trendy', videos: [] },
+      { name: 'Teaser', slug: 'teaser', videos: [] },
+      { name: 'Vlog', slug: 'vlog', videos: [] },
+    ],
+    ...makeLegacyProjectMedia('ks-modesty', 15, 4),
   },
   {
     id: 'naklo-b3da',
@@ -56,8 +79,12 @@ const projectFiles = [
       tiktok: 'https://www.tiktok.com/@naklob3da',
       handle: '@naklob3da',
     },
-    folders: ['Découvertes', 'Dégustation face cam', 'Contenu trendy'],
-    ...makeProjectMedia('naklo-b3da', 10, 8),
+    folders: [
+      { name: 'Découvertes', slug: 'decouvertes', videos: [] },
+      { name: 'Dégustation face cam', slug: 'degustation-face-cam', videos: [] },
+      { name: 'Contenu trendy', slug: 'contenu-trendy', videos: [] },
+    ],
+    ...makeLegacyProjectMedia('naklo-b3da', 10, 8),
   },
   {
     id: 'riwaya',
@@ -76,8 +103,59 @@ const projectFiles = [
       tiktok: 'https://www.tiktok.com/@riwaya_prod',
       handle: '@riwaya_prod',
     },
-    folders: ['Event recap', 'Backstage', 'Storytelling'],
-    ...makeProjectMedia('RIWAYA', 13, 7),
+    folders: [
+      makeMediaFolder('Contenu Mariage', 'RIWAYA', 'contenu-mariage', 4),
+      makeMediaFolder('Location de Robes', 'RIWAYA', 'location-robes', 4),
+      makeMediaFolder('Pâtisserie', 'RIWAYA', 'patisserie', 5),
+    ],
+    images: makeProjectImages('RIWAYA', 13),
+    videos: makeProjectVideos('RIWAYA', 'carousel', 9),
+  },
+  {
+    id: 'dystinct-agency',
+    name: 'DYSTINCT AGENCY',
+    folder: 'DYSTINCT_AGENCY',
+    color: '#183f48',
+    accent: '#8fd7d2',
+    role: 'Production social media',
+    summary: 'Contenus restaurant, lifestyle et activations de marque.',
+    period: 'Agence · Brand content',
+    mission: 'Produire des formats courts adaptés aux identités de lieux et aux objectifs de communication de chaque marque.',
+    services: ['Tournage', 'Montage Reels', 'Contenu food', 'Social media'],
+    logo: null,
+    logoText: 'DYST',
+    social: {},
+    folders: [
+      makeMediaFolder('Café de la poste', 'dystinct-agency', 'cafe-de-la-poste', 1),
+      makeMediaFolder('Italian Canteen', 'dystinct-agency', 'italian-canteen', 4),
+      makeMediaFolder('Marvelous Burger', 'dystinct-agency', 'marvelous-burger', 10),
+      makeMediaFolder('SLS Collection', 'dystinct-agency', 'sls-collection', 5),
+    ],
+    images: makeProjectImages('dystinct-agency', 11),
+    videos: makeProjectVideos('dystinct-agency', 'carousel', 5),
+  },
+  {
+    id: 'trio-promo',
+    name: 'TRIO PROMO',
+    folder: 'TRIO_PROMO',
+    color: '#7a2531',
+    accent: '#f0b26f',
+    role: 'Création de contenu promotionnel',
+    summary: 'Formats courts orientés promotion, humour, information et événementiel.',
+    period: 'Brand content · Promotion',
+    mission: 'Décliner une présence vidéo claire et dynamique à travers plusieurs angles éditoriaux adaptés aux réseaux sociaux.',
+    services: ['Contenu promotionnel', 'Contenu informatif', 'Humour', 'Gestion de crise'],
+    logo: asset('/projects/trio-promo/trio-promo-logo-transparent.png'),
+    social: {},
+    folders: [
+      makeMediaFolder('Contenu Humour', 'trio-promo', 'contenu-humour', 4),
+      makeMediaFolder('Contenu Informatif', 'trio-promo', 'contenu-informatif', 4),
+      makeMediaFolder('Contenu Promotionnel', 'trio-promo', 'contenu-promotionnel', 8),
+      makeMediaFolder('Événementiel', 'trio-promo', 'evenementiel', 3),
+      makeMediaFolder('Gestion de crise', 'trio-promo', 'gestion-de-crise', 1),
+    ],
+    images: [],
+    videos: makeProjectVideos('trio-promo', 'carousel', 4),
   },
 ]
 
@@ -100,8 +178,11 @@ const staticAssetsToPreload = [
 
 function ProjectDesktop() {
   const [openFolders, setOpenFolders] = useState([])
+  const [openMediaFolders, setOpenMediaFolders] = useState([])
   const [openCases, setOpenCases] = useState([])
   const [infoSlides, setInfoSlides] = useState({})
+  const [mediaFolderSlides, setMediaFolderSlides] = useState({})
+  const [imagePreview, setImagePreview] = useState(null)
   const [manualPlayback, setManualPlayback] = useState({})
   const [videoPlaybackState, setVideoPlaybackState] = useState({})
   const [videoVolumes, setVideoVolumes] = useState({})
@@ -120,7 +201,7 @@ function ProjectDesktop() {
         openCases.forEach((id) => {
           if (manualPlayback[id]) return
           const item = projectFiles.find((project) => project.id === id)
-          if (item) next[id] = ((current[id] ?? 0) + 1) % item.videos.length
+          if (item?.videos.length) next[id] = ((current[id] ?? 0) + 1) % item.videos.length
         })
         return next
       })
@@ -141,19 +222,33 @@ function ProjectDesktop() {
     setVideoVolumes((current) => ({ ...current, [id]: current[id] ?? 1 }))
     setWindowPositions((current) => ({
       ...current,
-      [id]: current[id] ?? {
+      [`case-${id}`]: current[`case-${id}`] ?? {
         x: (projectFiles.findIndex((item) => item.id === id) - 1) * 46,
         y: projectFiles.findIndex((item) => item.id === id) * 28,
       },
     }))
   }
 
+  const openMediaFolder = (projectId, folderSlug) => {
+    const project = projectFiles.find((item) => item.id === projectId)
+    const folder = project?.folders.find((item) => item.slug === folderSlug)
+    if (!folder?.videos.length) return
+    const key = `${projectId}-${folderSlug}`
+    setOpenMediaFolders((current) => [...current.filter((item) => item.key !== key), { key, projectId, folderSlug }])
+    setMediaFolderSlides((current) => ({ ...current, [key]: current[key] ?? 0 }))
+  }
+
   const closeFolder = (id) => {
     setOpenFolders((current) => current.filter((item) => item !== id))
   }
 
+  const closeMediaFolder = (key) => {
+    setOpenMediaFolders((current) => current.filter((item) => item.key !== key))
+  }
+
   const closeCase = (id) => {
     setOpenCases((current) => current.filter((item) => item !== id))
+    setImagePreview((current) => (current?.projectId === id ? null : current))
   }
 
   const openSocialWindow = (projectId, platform) => {
@@ -164,6 +259,8 @@ function ProjectDesktop() {
   }
 
   const closeSocialWindow = () => {}
+
+  const getWindowPosition = (id, fallback = { x: 0, y: 0 }) => windowPositions[id] ?? fallback
 
   const moveInfoSlide = (id, direction) => {
     const project = projectFiles.find((item) => item.id === id)
@@ -180,6 +277,10 @@ function ProjectDesktop() {
     setInfoSlides((current) => ({ ...current, [id]: index }))
     setManualPlayback((current) => ({ ...current, [id]: true }))
     setVideoPlaybackState((current) => ({ ...current, [id]: true }))
+  }
+
+  const selectFolderVideo = (key, index) => {
+    setMediaFolderSlides((current) => ({ ...current, [key]: index }))
   }
 
   const toggleMainVideoPlayback = (id) => {
@@ -232,8 +333,8 @@ function ProjectDesktop() {
   }, [])
 
   const startMoving = (event, id) => {
-    if (event.target.closest('button')) return
-    focusProject(id)
+    if (event.target.closest('button, input, a, video, object')) return
+    if (id.startsWith('case-')) focusProject(id.replace(/^case-/, ''))
     const position = windowPositions[id] ?? { x: 0, y: 0 }
     dragState.current = {
       id,
@@ -285,8 +386,8 @@ function ProjectDesktop() {
             style={{ '--folder-color': item.color, '--folder-accent': item.accent }}
           >
             <span className="folder-icon" aria-hidden="true">
-              <img src={item.logo} alt="" />
-              <b className="folder-notification">{index === 0 ? 4 : index === 1 ? 8 : 3}</b>
+              {item.logo ? <img src={item.logo} alt="" /> : <strong>{item.logoText ?? item.name.slice(0, 2)}</strong>}
+              <b className="folder-notification">{item.folders.length + 1}</b>
             </span>
             <span>{item.folder}</span>
           </button>
@@ -326,8 +427,14 @@ function ProjectDesktop() {
       </button>
 
       {cvOpen ? (
-        <div className="cv-window">
-          <div className="window-bar">
+        <div
+          className="cv-window desktop-resizable-window"
+          style={{
+            '--window-x': `${getWindowPosition('cv').x}px`,
+            '--window-y': `${getWindowPosition('cv').y}px`,
+          }}
+        >
+          <div className="window-bar" onPointerDown={(event) => startMoving(event, 'cv')}>
             <div className="window-controls">
               <button type="button" onClick={() => setCvOpen(false)} aria-label="Fermer le CV" />
               <i />
@@ -350,8 +457,14 @@ function ProjectDesktop() {
       ) : null}
 
       {letterOpen ? (
-        <div className="cv-window letter-window">
-          <div className="window-bar">
+        <div
+          className="cv-window letter-window desktop-resizable-window"
+          style={{
+            '--window-x': `${getWindowPosition('letter').x}px`,
+            '--window-y': `${getWindowPosition('letter').y}px`,
+          }}
+        >
+          <div className="window-bar" onPointerDown={(event) => startMoving(event, 'letter')}>
             <div className="window-controls">
               <button type="button" onClick={() => setLetterOpen(false)} aria-label="Fermer la lettre de motivation" />
               <i />
@@ -376,18 +489,22 @@ function ProjectDesktop() {
       {openFolders.map((projectId, windowIndex) => {
         const project = projectFiles.find((item) => item.id === projectId)
         if (!project) return null
+        const folderWindowId = `folder-${project.id}`
+        const folderPosition = getWindowPosition(folderWindowId)
 
         return (
           <div
-            className="project-window"
+            className="project-window desktop-resizable-window"
             key={`folder-${project.id}`}
             style={{
+              '--window-x': `${folderPosition.x}px`,
+              '--window-y': `${folderPosition.y}px`,
               left: `calc(50% + ${(windowIndex - 1) * 56}px)`,
               top: `${17 + windowIndex * 3}%`,
               zIndex: 20 + windowIndex,
             }}
           >
-            <div className="window-bar">
+            <div className="window-bar" onPointerDown={(event) => startMoving(event, folderWindowId)}>
               <div className="window-controls">
                 <button type="button" onClick={() => closeFolder(project.id)} aria-label="Fermer le dossier" />
                 <i />
@@ -419,26 +536,98 @@ function ProjectDesktop() {
                   style={{ '--project-color': project.color }}
                 >
                   <span>
-                    <img src={project.logo} alt="" />
+                    {project.logo ? <img src={project.logo} alt="" /> : <b>{project.logoText ?? project.name.slice(0, 2)}</b>}
                   </span>
                   <em>open me</em>
                   <small>{project.folder}.exe</small>
                 </button>
 
-                {project.folders.map((folderName) => (
+                {project.folders.map((folder) => (
                   <button
                     type="button"
-                    className="media-file project-subfolder"
-                    key={`${project.id}-${folderName}`}
+                    className={`media-file project-subfolder${folder.videos.length ? ' has-videos' : ''}`}
+                    key={`${project.id}-${folder.slug}`}
+                    onClick={() => openMediaFolder(project.id, folder.slug)}
+                    disabled={!folder.videos.length}
                     style={{ '--project-color': project.color, '--project-accent': project.accent }}
                   >
                     <span className="folder-preview" aria-hidden="true">
                       <i />
                     </span>
-                    <small>{folderName}</small>
+                    <small>{folder.name}</small>
                   </button>
                 ))}
               </div>
+            </div>
+          </div>
+        )
+      })}
+
+      {openMediaFolders.map((entry, windowIndex) => {
+        const project = projectFiles.find((item) => item.id === entry.projectId)
+        const folder = project?.folders.find((item) => item.slug === entry.folderSlug)
+        if (!project || !folder?.videos.length) return null
+        const selectedIndex = mediaFolderSlides[entry.key] ?? 0
+        const currentVideo = folder.videos[selectedIndex] ?? folder.videos[0]
+        const mediaPosition = getWindowPosition(`media-${entry.key}`)
+
+        return (
+          <div
+            className="media-window themed-media-window desktop-resizable-window"
+            key={entry.key}
+            style={{
+              '--project-color': project.color,
+              '--window-x': `${mediaPosition.x}px`,
+              '--window-y': `${mediaPosition.y}px`,
+              left: `calc(50% + ${(windowIndex - 1) * 44}px)`,
+              top: `${21 + windowIndex * 3}%`,
+              zIndex: 24 + windowIndex,
+            }}
+          >
+            <div className="window-bar" onPointerDown={(event) => startMoving(event, `media-${entry.key}`)}>
+              <div className="window-controls">
+                <button type="button" onClick={() => closeMediaFolder(entry.key)} aria-label="Fermer le dossier média" />
+                <i />
+                <i />
+              </div>
+              <span>{project.folder} / {folder.name}</span>
+            </div>
+            <div className="media-window-content themed-media-player">
+              <div className="reel-device">
+                <video
+                  key={currentVideo.src}
+                  src={currentVideo.src}
+                  poster={currentVideo.poster}
+                  autoPlay
+                  muted
+                  loop
+                  controls
+                  playsInline
+                  preload="auto"
+                  onLoadedMetadata={(event) => {
+                    event.currentTarget.muted = true
+                    void event.currentTarget.play().catch(() => {})
+                  }}
+                />
+              </div>
+            </div>
+            <div className="media-window-footer themed-media-footer">
+              <strong>{folder.name}</strong>
+              <span>Player</span>
+              <small>{String(selectedIndex + 1).padStart(2, '0')} / {String(folder.videos.length).padStart(2, '0')}</small>
+            </div>
+            <div className="folder-video-strip" aria-label={`Vidéos disponibles dans ${folder.name}`}>
+              {folder.videos.map((video, index) => (
+                <button
+                  type="button"
+                  key={video.src}
+                  className={`folder-video-thumb${selectedIndex === index ? ' is-active' : ''}`}
+                  onClick={() => selectFolderVideo(entry.key, index)}
+                  aria-label={`Ouvrir ${video.label}`}
+                >
+                  <img src={video.poster} alt="" loading="lazy" decoding="async" />
+                </button>
+              ))}
             </div>
           </div>
         )
@@ -452,11 +641,17 @@ function ProjectDesktop() {
         const isManualMode = manualPlayback[projectId] ?? false
         const isPlaying = videoPlaybackState[projectId] ?? true
         const volume = videoVolumes[projectId] ?? 1
-        const position = windowPositions[projectId] ?? { x: 0, y: 0 }
+        const position = getWindowPosition(`case-${projectId}`, {
+          x: (projectFiles.findIndex((item) => item.id === projectId) - 1) * 46,
+          y: projectFiles.findIndex((item) => item.id === projectId) * 28,
+        })
+        const activeImagePreview = imagePreview?.projectId === projectId
+          ? imagePreview
+          : project.images[0]
 
         return (
         <div
-          className="info-window case-study-window"
+          className="info-window case-study-window desktop-resizable-window"
           key={project.id}
           onPointerDown={() => focusProject(project.id)}
           style={{
@@ -466,7 +661,7 @@ function ProjectDesktop() {
             zIndex: 30 + windowIndex,
           }}
         >
-          <div className="window-bar" onPointerDown={(event) => startMoving(event, project.id)}>
+          <div className="window-bar" onPointerDown={(event) => startMoving(event, `case-${project.id}`)}>
             <div className="window-controls">
               <button type="button" onClick={() => closeCase(project.id)} aria-label="Fermer le projet" />
               <i />
@@ -492,8 +687,9 @@ function ProjectDesktop() {
           ) : null}
           <div className="info-content">
             <div className="info-copy">
-              {project.id === 'naklo-b3da' ? (
-                <>
+              <div className={`project-story-panel project-story-${project.id}`}>
+                {project.id === 'naklo-b3da' ? (
+                  <>
                   <img className="naklo-info-logo" src={asset("/projects/naklo-b3da/NAKBLO_LOGO.png")} alt="Naklo B3da w i7en Lah" />
                   <section className="naklo-info-text">
                     <h4>ORIGINE <em>de notre nom</em></h4>
@@ -503,17 +699,17 @@ function ProjectDesktop() {
                     <h4>CONCEPT &amp; OBJECTIF <em>de ce projet</em></h4>
                     <p>Étant franco-marocaine et grande adepte de tout ce qui est relié de près ou de loin à la nourriture, je me devais de créer un concept qui permettrait à ma communauté de découvrir de nouvelles spécialités culinaires et activités existantes en France et au Maroc. Objectif ? Partager un univers qui me passionne, promouvoir l’inclusivité et l’accessibilité à travers la découverte de lieux qui ont pour cibles tout type de profil client. Ma sœur m’a rejointe dans ce magnifique projet : bienvenue dans notre univers.</p>
                   </section>
-                </>
-              ) : project.id === 'ks-modesty' ? (
-                <>
+                  </>
+                ) : project.id === 'ks-modesty' ? (
+                  <>
                   <img className="ks-info-logo" src={asset("/projects/KSMODESTY/KS_logo.png")} alt="KS Modesty" />
                   <section className="ks-info-text">
                     <h4>CONCEPT &amp; OBJECTIF <em>de ce projet</em></h4>
                     <p>J’ai développé un projet qui me ressemble et qui répondait à un réel besoin sur le marché. KS Modesty est une marque spécialisée dans les voiles d’exception, et se distingue par une approche novatrice. Le message que je souhaite transmettre est qu’une femme qui fait le choix vestimentaire du voile ne doit pas se perdre dans les attentes de la société ni se vêtir de manière monotone et sans extravagance. Bref, j’en ai dit assez.</p>
                   </section>
-                </>
-              ) : project.id === 'riwaya' ? (
-                <>
+                  </>
+                ) : project.id === 'riwaya' ? (
+                  <>
                   <img className="riwaya-info-logo" src={asset("/projects/RIWAYA/riwaya_logo.png")} alt="Riwāya" />
                   <section className="riwaya-info-text">
                     <h4>ORIGINE <em>de notre nom</em></h4>
@@ -523,61 +719,111 @@ function ProjectDesktop() {
                     <h4>CONCEPT &amp; OBJECTIF <em>de ce projet</em></h4>
                     <p>J’ai lancé ce compte de création de contenu événementiel parce qu’il réunit tout ce qui me passionne : l’esthétique, le sens du détail, la création de contenu et surtout l’émotion humaine. J’aime capturer ces instants qui ne se reproduiront jamais deux fois, mettre en lumière la beauté d’un moment, d’un lieu ou d’une histoire à travers mon regard. Chaque événement est une occasion de raconter quelque chose d’unique, de transformer des souvenirs en images et de faire ressentir aux autres une atmosphère bien précise.</p>
                   </section>
-                </>
-              ) : (
-                <>
-              <div className="case-study-index">PROJECT FILE / 0{projectFiles.findIndex((item) => item.id === project.id) + 1}</div>
-              <h3>{project.name}</h3>
-              <p className="case-study-period">{project.period}</p>
-              <p className="case-study-mission">{project.mission}</p>
-              <dl>
-                <dt>Rôle</dt>
-                <dd>{project.role}</dd>
-                <dt>Médias</dt>
-                <dd>{project.videos.length} vidéos · {project.images.length} images</dd>
-              </dl>
-              <div className="case-study-services">
-                {project.services.map((service) => <span key={service}>{service}</span>)}
+                  </>
+                ) : project.id === 'dystinct-agency' ? (
+                  <>
+                    <div className="experience-brand dystinct-brand" aria-hidden="true">DYST</div>
+                    <section className="experience-info-text">
+                      <h4>EXPÉRIENCE</h4>
+                      <p>Mon expérience chez Dystinct Agency a marqué un véritable tournant dans mon parcours. En intégrant cette agence de communication parisienne, j’ai eu l’opportunité de collaborer avec des marques issues de secteurs très variés, tout en développant une véritable expertise dans l’univers de la food, un domaine qui me passionne particulièrement. Cette immersion m’a permis de gagner en rigueur, en professionnalisme et en polyvalence, en apprenant à concevoir des stratégies de communication, créer du contenu à forte valeur ajoutée et répondre aux attentes de clients aux univers très différents. Une expérience aussi enrichissante qu’exigeante, qui a renforcé ma vision de la communication et confirmé mon envie d’en faire bien plus qu’un métier.</p>
+                    </section>
+                    <p className="case-study-period">{project.period}</p>
+                    <div className="case-study-services">
+                      {project.services.map((service) => <span key={service}>{service}</span>)}
+                    </div>
+                  </>
+                ) : project.id === 'trio-promo' ? (
+                  <>
+                    <img className="experience-brand trio-brand" src={asset('/projects/trio-promo/trio-promo-logo-transparent.png')} alt="Trio Promo" />
+                    <section className="experience-info-text">
+                      <h4>EXPÉRIENCE</h4>
+                      <p>Mon expérience chez Trio Promo a été un véritable défi… et sans doute l’une de celles qui m’ont le plus fait évoluer. En rejoignant ce magasin de déstockage alimentaire, je suis sortie de ma zone de confort : je devais m’adresser à une cible bien plus âgée, sur une communication principalement orientée vers Facebook, un univers très différent de celui auquel j’étais habituée. Plutôt que de reproduire ce qui existait déjà, j’ai choisi d’y apporter ma vision en développant un contenu plus moderne, plus dynamique et plus engageant. Petit à petit, une clientèle plus jeune, qui ne s’intéressait pas naturellement à ce type d’enseigne, a commencé à découvrir le magasin à travers mes contenus. Cette expérience m’a appris à adapter ma créativité à des contraintes très différentes, à construire une stratégie adaptée au terrain et à sortir de mes automatismes. J’en ressors avec une plus grande capacité d’adaptation et surtout une meilleure compréhension des enjeux de communication locale.</p>
+                    </section>
+                    <p className="case-study-period">{project.period}</p>
+                    <div className="case-study-services">
+                      {project.services.map((service) => <span key={service}>{service}</span>)}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="case-study-index">PROJECT FILE / 0{projectFiles.findIndex((item) => item.id === project.id) + 1}</div>
+                    <h3>{project.name}</h3>
+                    <p className="case-study-period">{project.period}</p>
+                    <p className="case-study-mission">{project.mission}</p>
+                    <dl>
+                      <dt>Rôle</dt>
+                      <dd>{project.role}</dd>
+                      <dt>Médias</dt>
+                      <dd>{project.videos.length} vidéos · {project.images.length} images</dd>
+                    </dl>
+                    <div className="case-study-services">
+                      {project.services.map((service) => <span key={service}>{service}</span>)}
+                    </div>
+                  </>
+                )}
               </div>
-                </>
-              )}
-              <div className="project-image-grid" aria-label={`Galerie photo ${project.name}`}>
-                {project.images.map((image) => (
-                  <figure key={image.src}>
-                    <img src={image.src} alt={`${project.name} — ${image.label}`} loading="lazy" decoding="async" />
-                  </figure>
-                ))}
-              </div>
-              <div className="project-socials" aria-label={`Réseaux sociaux ${project.name}`}>
-                <button
-                  type="button"
-                  className="project-social project-social-instagram"
-                  onClick={() => openSocialWindow(project.id, 'instagram')}
-                  aria-label={`Ouvrir la fenêtre Instagram de ${project.name}`}
-                >
-                  <span aria-hidden="true">
-                    <svg viewBox="0 0 24 24" role="img" focusable="false">
-                      <rect x="3.25" y="3.25" width="17.5" height="17.5" rx="5.25" ry="5.25" fill="none" stroke="currentColor" strokeWidth="1.9" />
-                      <circle cx="12" cy="12" r="4.15" fill="none" stroke="currentColor" strokeWidth="1.9" />
-                      <circle cx="17.45" cy="6.55" r="1.2" fill="currentColor" />
-                    </svg>
-                  </span>
-                  <b>Instagram</b>
-                </button>
-                <button
-                  type="button"
-                  className="project-social project-social-tiktok"
-                  onClick={() => openSocialWindow(project.id, 'tiktok')}
-                  aria-label={`Ouvrir la fenêtre TikTok de ${project.name}`}
-                >
-                  <span aria-hidden="true">
-                    <svg viewBox="0 0 24 24" role="img" focusable="false">
-                      <path fill="currentColor" d="M14.72 3c.36 1.97 1.56 3.54 3.82 4.03v2.63a7.18 7.18 0 0 1-3.7-1.09l-.02 6.18a5.58 5.58 0 1 1-5.57-5.57c.34 0 .64.03.93.09v2.77a2.85 2.85 0 1 0 1.92 2.71V3h2.62Z" />
-                    </svg>
-                  </span>
-                  <b>TikTok</b>
-                </button>
-              </div>
+              {project.images.length ? (
+                <div className="project-gallery-panel">
+                  <div className="project-panel-label">
+                    <span>Gallery</span>
+                    <small>{String(project.images.length).padStart(2, '0')} images</small>
+                  </div>
+                  <div className="project-gallery-board" aria-label={`Galerie photo ${project.name}`}>
+                    <figure className="project-gallery-feature">
+                      <img src={activeImagePreview.src} alt={`${project.name} — ${activeImagePreview.label}`} />
+                    </figure>
+                    <div className="project-image-grid">
+                      {project.images.map((image) => (
+                        <figure
+                          key={image.src}
+                          className={activeImagePreview.src === image.src ? 'is-active' : ''}
+                          onPointerEnter={() => setImagePreview({ projectId: project.id, ...image })}
+                          onFocus={() => setImagePreview({ projectId: project.id, ...image })}
+                          tabIndex={0}
+                        >
+                          <img src={image.src} alt={`${project.name} — ${image.label}`} loading="lazy" decoding="async" />
+                        </figure>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+              {project.social?.instagram || project.social?.tiktok ? (
+                <div className="project-socials" aria-label={`Réseaux sociaux ${project.name}`}>
+                  {project.social?.instagram ? (
+                    <button
+                      type="button"
+                      className="project-social project-social-instagram"
+                      onClick={() => openSocialWindow(project.id, 'instagram')}
+                      aria-label={`Ouvrir la fenêtre Instagram de ${project.name}`}
+                    >
+                      <span aria-hidden="true">
+                        <svg viewBox="0 0 24 24" role="img" focusable="false">
+                          <rect x="3.25" y="3.25" width="17.5" height="17.5" rx="5.25" ry="5.25" fill="none" stroke="currentColor" strokeWidth="1.9" />
+                          <circle cx="12" cy="12" r="4.15" fill="none" stroke="currentColor" strokeWidth="1.9" />
+                          <circle cx="17.45" cy="6.55" r="1.2" fill="currentColor" />
+                        </svg>
+                      </span>
+                      <b>Instagram</b>
+                    </button>
+                  ) : null}
+                  {project.social?.tiktok ? (
+                    <button
+                      type="button"
+                      className="project-social project-social-tiktok"
+                      onClick={() => openSocialWindow(project.id, 'tiktok')}
+                      aria-label={`Ouvrir la fenêtre TikTok de ${project.name}`}
+                    >
+                      <span aria-hidden="true">
+                        <svg viewBox="0 0 24 24" role="img" focusable="false">
+                          <path fill="currentColor" d="M14.72 3c.36 1.97 1.56 3.54 3.82 4.03v2.63a7.18 7.18 0 0 1-3.7-1.09l-.02 6.18a5.58 5.58 0 1 1-5.57-5.57c.34 0 .64.03.93.09v2.77a2.85 2.85 0 1 0 1.92 2.71V3h2.62Z" />
+                        </svg>
+                      </span>
+                      <b>TikTok</b>
+                    </button>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
             <div className="info-carousel">
               <div className="info-carousel-stage media-type-video">
@@ -656,24 +902,7 @@ function ProjectDesktop() {
                     onClick={() => selectProjectVideo(project.id, index)}
                     aria-label={`Lire ${media.label} avec le son`}
                   >
-                    <video
-                      src={media.src}
-                      poster={project.images[index % project.images.length]?.src}
-                      muted
-                      playsInline
-                      preload="none"
-                      onMouseEnter={(event) => {
-                        const video = event.currentTarget
-                        video.currentTime = 0
-                        void video.play().catch(() => {})
-                      }}
-                      onMouseLeave={(event) => {
-                        const video = event.currentTarget
-                        video.pause()
-                        video.currentTime = 0
-                      }}
-                    />
-                    <span>{media.label}</span>
+                    <img src={media.poster} alt="" loading="lazy" decoding="async" />
                   </button>
                 ))}
               </div>

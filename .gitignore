@@ -2,3 +2,5 @@ node_modules/
 dist/
 .vite/
 *.log
+Project_videos/
+public/projects/**/*.MOV
