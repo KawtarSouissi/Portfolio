@@ -55,10 +55,9 @@ const projectFiles = [
       handle: '@ksmodesty',
     },
     folders: [
-      { name: 'Contenu promotionnel', slug: 'contenu-promotionnel', videos: [] },
-      { name: 'Contenu Trendy', slug: 'contenu-trendy', videos: [] },
-      { name: 'Teaser', slug: 'teaser', videos: [] },
-      { name: 'Vlog', slug: 'vlog', videos: [] },
+      makeMediaFolder('Promotionnel', 'ks-modesty', 'promotionnel', 5),
+      makeMediaFolder('Trendy', 'ks-modesty', 'trendy', 5),
+      makeMediaFolder('Vlog', 'ks-modesty', 'vlog', 2),
     ],
     ...makeLegacyProjectMedia('ks-modesty', 15, 4),
   },
@@ -80,11 +79,11 @@ const projectFiles = [
       handle: '@naklob3da',
     },
     folders: [
-      { name: 'Découvertes', slug: 'decouvertes', videos: [] },
-      { name: 'Dégustation face cam', slug: 'degustation-face-cam', videos: [] },
-      { name: 'Contenu trendy', slug: 'contenu-trendy', videos: [] },
+      makeMediaFolder('Découvertes', 'naklo-b3da', 'decouvertes', 9),
+      makeMediaFolder('Dégustation face cam', 'naklo-b3da', 'degustation-face-cam', 4),
+      makeMediaFolder('Trendy', 'naklo-b3da', 'trendy', 6),
     ],
-    ...makeLegacyProjectMedia('naklo-b3da', 10, 8),
+    ...makeLegacyProjectMedia('naklo-b3da', 9, 8),
   },
   {
     id: 'riwaya',
@@ -197,6 +196,7 @@ function ProjectDesktop() {
   const [desktopNow, setDesktopNow] = useState(() => new Date())
   const dragState = useRef(null)
   const projectVideoRefs = useRef({})
+  const mediaVideoRefs = useRef({})
   const [cvOpen, setCvOpen] = useState(false)
   const [letterOpen, setLetterOpen] = useState(false)
   const [socialWindows] = useState([])
@@ -228,12 +228,7 @@ function ProjectDesktop() {
   }
 
   const openProject = (id) => {
-    rememberProject(id)
-    setOpenFolders((current) => [...current.filter((item) => item !== id), id])
-    setWindowPositions((current) => ({
-      ...current,
-      [`folder-${id}`]: { x: 0, y: 0 },
-    }))
+    openProjectCase(id)
   }
 
   const openProjectCase = (id) => {
@@ -367,6 +362,35 @@ function ProjectDesktop() {
     setVideoVolumes((current) => ({ ...current, [id]: volume }))
   }
 
+  useEffect(() => {
+    const activeMediaKey = openMediaFolders.length ? openMediaFolders[openMediaFolders.length - 1].key : null
+    const activeCaseId = activeMediaKey ? null : openCases[openCases.length - 1]
+
+    Object.entries(projectVideoRefs.current).forEach(([id, video]) => {
+      if (!video) return
+      if (id !== activeCaseId) {
+        video.pause()
+        return
+      }
+      video.muted = !(manualPlayback[id] ?? false) || (videoVolumes[id] ?? 1) === 0
+      video.preload = 'metadata'
+      if (videoPlaybackState[id] ?? true) {
+        void video.play().catch(() => {})
+      }
+    })
+
+    Object.entries(mediaVideoRefs.current).forEach(([key, video]) => {
+      if (!video) return
+      if (key !== activeMediaKey) {
+        video.pause()
+        return
+      }
+      video.muted = true
+      video.preload = 'metadata'
+      void video.play().catch(() => {})
+    })
+  }, [infoSlides, manualPlayback, mediaFolderSlides, openCases, openMediaFolders, videoPlaybackState, videoVolumes])
+
   const focusProject = (id) => {
     setOpenCases((current) => [...current.filter((item) => item !== id), id])
   }
@@ -406,6 +430,9 @@ function ProjectDesktop() {
       originY: position.y,
     }
   }
+
+  const activeOpenMediaKey = openMediaFolders.length ? openMediaFolders[openMediaFolders.length - 1].key : null
+  const activeOpenCaseId = activeOpenMediaKey ? null : openCases[openCases.length - 1]
 
   return (
     <section className="projects-section" id="projects" aria-label="Projets et expériences">
@@ -455,7 +482,7 @@ function ProjectDesktop() {
 
           return (
           <button
-            className={`desktop-folder folder-${index + 1} project-folder-${item.id}${openFolders.includes(item.id) ? ' is-selected' : ''}${isVisible ? '' : ' is-filtered-out'}`}
+            className={`desktop-folder folder-${index + 1} project-folder-${item.id}${openCases.includes(item.id) ? ' is-selected' : ''}${isVisible ? '' : ' is-filtered-out'}`}
             type="button"
             key={item.id}
             onDoubleClick={() => openProject(item.id)}
@@ -677,21 +704,6 @@ function ProjectDesktop() {
                   <small>{project.folder}.exe</small>
                 </button>
 
-                {project.folders.map((folder) => (
-                  <button
-                    type="button"
-                    className={`media-file project-subfolder${folder.videos.length ? ' has-videos' : ''}`}
-                    key={`${project.id}-${folder.slug}`}
-                    onClick={() => openMediaFolder(project.id, folder.slug)}
-                    disabled={!folder.videos.length}
-                    style={{ '--project-color': project.color, '--project-accent': project.accent }}
-                  >
-                    <span className="folder-preview" aria-hidden="true">
-                      <i />
-                    </span>
-                    <small>{folder.name}</small>
-                  </button>
-                ))}
               </div>
             </div>
           </div>
@@ -730,18 +742,24 @@ function ProjectDesktop() {
             <div className="media-window-content themed-media-player">
               <div className="reel-device">
                 <video
+                  ref={(node) => {
+                    if (node) mediaVideoRefs.current[entry.key] = node
+                    else delete mediaVideoRefs.current[entry.key]
+                  }}
                   key={currentVideo.src}
                   src={currentVideo.src}
                   poster={currentVideo.poster}
-                  autoPlay
+                  autoPlay={entry.key === activeOpenMediaKey}
                   muted
                   loop
                   controls
                   playsInline
-                  preload="auto"
+                  preload="metadata"
                   onLoadedMetadata={(event) => {
                     event.currentTarget.muted = true
-                    void event.currentTarget.play().catch(() => {})
+                    if (entry.key === activeOpenMediaKey) {
+                      void event.currentTarget.play().catch(() => {})
+                    }
                   }}
                 />
               </div>
@@ -967,17 +985,20 @@ function ProjectDesktop() {
                 <video
                   ref={(node) => {
                     if (node) projectVideoRefs.current[project.id] = node
+                    else delete projectVideoRefs.current[project.id]
                   }}
                   src={currentSlide?.src}
-                  autoPlay
+                  autoPlay={project.id === activeOpenCaseId}
                   loop={!isManualMode}
                   muted={!isManualMode || volume === 0}
                   controls={false}
                   playsInline
-                  preload="auto"
+                  preload="metadata"
                   onLoadedMetadata={(event) => {
                     event.currentTarget.volume = volume
-                    if (isManualMode) {
+                    if (project.id !== activeOpenCaseId) {
+                      event.currentTarget.pause()
+                    } else if (isManualMode) {
                       void event.currentTarget.play()
                     } else {
                       void event.currentTarget.play().catch(() => {})
@@ -1207,7 +1228,7 @@ function VideoRail() {
   const railVideos = [...videos, ...videos]
 
   useEffect(() => {
-    videoRefs.current.forEach((video) => {
+    videoRefs.current.slice(0, 3).forEach((video) => {
       if (!video) return
       video.play().catch(() => {})
     })
@@ -1220,11 +1241,11 @@ function VideoRail() {
           <article className="video-card" key={`${video.src}-${index}`}>
             <video
               ref={(element) => { videoRefs.current[index] = element }}
-              autoPlay
+              autoPlay={index < 3}
               loop
               muted
               playsInline
-              preload="metadata"
+              preload={index < 3 ? 'metadata' : 'none'}
               poster={asset("/hero.png")}
               onLoadedMetadata={(event) => {
                 if (!video.src.endsWith('video-05-web.mp4')) return
@@ -1271,9 +1292,10 @@ export default function App() {
     const projectAssets = projectFiles.flatMap((project) => [
       project.logo,
       ...project.images.map((image) => image.src),
-      ...project.videos.map((video) => video.src),
+      ...project.videos.map((video) => video.poster),
+      ...project.folders.flatMap((folder) => folder.videos.map((video) => video.poster)),
     ])
-    const assetsToWarm = [...staticAssetsToPreload, ...videos.map((video) => video.src), ...projectAssets]
+    const assetsToWarm = [...staticAssetsToPreload, asset('/hero.png'), ...projectAssets]
     const warmed = new Set()
 
     assetsToWarm.forEach((url) => {
@@ -1485,34 +1507,6 @@ export default function App() {
         </div>
       </section>
 
-      <section className="bag-section" id="work" ref={bagRef}>
-        <div className="bag-title">
-          <strong>WHAT&apos;S IN</strong>
-          <em>My bag</em>
-        </div>
-
-        <div className="bag-labels" aria-label="Matériel de Kawtar">
-          {aboutLabels.map((label) => (
-            <button
-              className={`bag-label bag-label-${label.id}${selectedObject === label.id ? ' is-active' : ''}`}
-              type="button"
-              key={label.id}
-              onClick={() => setSelectedObject(label.id)}
-            >
-              <strong>{label.title}</strong>
-              <em>{label.subtitle}</em>
-              <small>{label.date}</small>
-            </button>
-          ))}
-        </div>
-
-        {loadBagScene ? (
-          <Suspense fallback={null}>
-            <AboutScene active={bagVisible} selected={selectedObject} onSelect={setSelectedObject} />
-          </Suspense>
-        ) : null}
-      </section>
-
       <section className="about-me-section" id="about" ref={aboutRef}>
         <div className="about-title">
           <strong>ABOUT</strong>
@@ -1550,6 +1544,34 @@ export default function App() {
               selected={hoveredTrait || selectedTrait}
               onSelect={setSelectedTrait}
             />
+          </Suspense>
+        ) : null}
+      </section>
+
+      <section className="bag-section" id="work" ref={bagRef}>
+        <div className="bag-title">
+          <strong>WHAT&apos;S IN</strong>
+          <em>My bag</em>
+        </div>
+
+        <div className="bag-labels" aria-label="Matériel de Kawtar">
+          {aboutLabels.map((label) => (
+            <button
+              className={`bag-label bag-label-${label.id}${selectedObject === label.id ? ' is-active' : ''}`}
+              type="button"
+              key={label.id}
+              onClick={() => setSelectedObject(label.id)}
+            >
+              <strong>{label.title}</strong>
+              <em>{label.subtitle}</em>
+              <small>{label.date}</small>
+            </button>
+          ))}
+        </div>
+
+        {loadBagScene ? (
+          <Suspense fallback={null}>
+            <AboutScene active={bagVisible} selected={selectedObject} onSelect={setSelectedObject} />
           </Suspense>
         ) : null}
       </section>

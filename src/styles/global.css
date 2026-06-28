@@ -2189,7 +2189,7 @@ a {
   color: #4a4245;
   font-size: 10px !important;
   line-height: 1.55 !important;
-  text-transform: lowercase;
+  text-transform: none;
 }
 
 .experience-brand {
@@ -2682,6 +2682,16 @@ a {
   font: inherit;
 }
 
+.case-study-window:has(.project-story-ks-modesty) .project-folder-access-button small,
+.case-study-window:has(.project-story-trio-promo) .project-folder-access-button small {
+  color: rgba(255, 255, 255, .94);
+}
+
+.case-study-window:has(.project-story-ks-modesty) .project-folder-access-header,
+.case-study-window:has(.project-story-trio-promo) .project-folder-access-header {
+  color: rgba(255, 255, 255, .72);
+}
+
 .project-social:hover,
 .project-social:focus-visible {
   transform: translateY(-2px);
@@ -2856,7 +2866,7 @@ a {
   font: 700 clamp(8px, .66vw, 10px)/1.4 Arial, sans-serif !important;
   letter-spacing: .01em;
   text-align: justify;
-  text-transform: lowercase;
+  text-transform: none;
 }
 
 .case-study-window:has(.ks-case-decoration) {
@@ -2918,7 +2928,7 @@ a {
   font: 700 clamp(9px, .72vw, 11px)/1.45 Arial, sans-serif !important;
   letter-spacing: .01em;
   text-align: left;
-  text-transform: lowercase;
+  text-transform: none;
 }
 
 .case-study-window:has(.ks-case-decoration) .project-image-grid figure {
@@ -2989,7 +2999,7 @@ a {
   font: 600 clamp(8px, .62vw, 10px)/1.34 Arial, sans-serif !important;
   letter-spacing: .01em;
   text-align: left;
-  text-transform: lowercase;
+  text-transform: none;
 }
 
 .case-study-window:has(.riwaya-case-decoration) .project-image-grid figure {
