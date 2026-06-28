@@ -146,7 +146,11 @@ const projectFiles = [
     mission: 'Décliner une présence vidéo claire et dynamique à travers plusieurs angles éditoriaux adaptés aux réseaux sociaux.',
     services: ['Contenu promotionnel', 'Contenu informatif', 'Humour', 'Gestion de crise'],
     logo: asset('/projects/trio-promo/trio-promo-logo-transparent.png'),
-    social: {},
+    social: {
+      instagram: 'https://www.instagram.com/triopromo54/',
+      tiktok: 'https://www.tiktok.com/@trio.promo',
+      handle: '@trio.promo',
+    },
     folders: [
       makeMediaFolder('Contenu Humour', 'trio-promo', 'contenu-humour', 4),
       makeMediaFolder('Contenu Informatif', 'trio-promo', 'contenu-informatif', 4),
@@ -187,6 +191,10 @@ function ProjectDesktop() {
   const [videoPlaybackState, setVideoPlaybackState] = useState({})
   const [videoVolumes, setVideoVolumes] = useState({})
   const [windowPositions, setWindowPositions] = useState({})
+  const [projectSearch, setProjectSearch] = useState('')
+  const [hoveredProjectId, setHoveredProjectId] = useState(null)
+  const [recentProjectIds, setRecentProjectIds] = useState([])
+  const [desktopNow, setDesktopNow] = useState(() => new Date())
   const dragState = useRef(null)
   const projectVideoRefs = useRef({})
   const [cvOpen, setCvOpen] = useState(false)
@@ -210,11 +218,26 @@ function ProjectDesktop() {
     return () => window.clearInterval(timer)
   }, [manualPlayback, openCases])
 
+  useEffect(() => {
+    const timer = window.setInterval(() => setDesktopNow(new Date()), 30000)
+    return () => window.clearInterval(timer)
+  }, [])
+
+  const rememberProject = (id) => {
+    setRecentProjectIds((current) => [id, ...current.filter((item) => item !== id)].slice(0, 3))
+  }
+
   const openProject = (id) => {
+    rememberProject(id)
     setOpenFolders((current) => [...current.filter((item) => item !== id), id])
+    setWindowPositions((current) => ({
+      ...current,
+      [`folder-${id}`]: { x: 0, y: 0 },
+    }))
   }
 
   const openProjectCase = (id) => {
+    rememberProject(id)
     setOpenCases((current) => [...current.filter((item) => item !== id), id])
     setInfoSlides((current) => ({ ...current, [id]: current[id] ?? 0 }))
     setManualPlayback((current) => ({ ...current, [id]: current[id] ?? false }))
@@ -222,10 +245,7 @@ function ProjectDesktop() {
     setVideoVolumes((current) => ({ ...current, [id]: current[id] ?? 1 }))
     setWindowPositions((current) => ({
       ...current,
-      [`case-${id}`]: current[`case-${id}`] ?? {
-        x: (projectFiles.findIndex((item) => item.id === id) - 1) * 46,
-        y: projectFiles.findIndex((item) => item.id === id) * 28,
-      },
+      [`case-${id}`]: { x: 0, y: 0 },
     }))
   }
 
@@ -233,9 +253,14 @@ function ProjectDesktop() {
     const project = projectFiles.find((item) => item.id === projectId)
     const folder = project?.folders.find((item) => item.slug === folderSlug)
     if (!folder?.videos.length) return
+    rememberProject(projectId)
     const key = `${projectId}-${folderSlug}`
     setOpenMediaFolders((current) => [...current.filter((item) => item.key !== key), { key, projectId, folderSlug }])
     setMediaFolderSlides((current) => ({ ...current, [key]: current[key] ?? 0 }))
+    setWindowPositions((current) => ({
+      ...current,
+      [`media-${key}`]: { x: 0, y: 0 },
+    }))
   }
 
   const closeFolder = (id) => {
@@ -260,7 +285,44 @@ function ProjectDesktop() {
 
   const closeSocialWindow = () => {}
 
+  const closeAllWindows = () => {
+    setOpenFolders([])
+    setOpenMediaFolders([])
+    setOpenCases([])
+    setCvOpen(false)
+    setLetterOpen(false)
+    setImagePreview(null)
+    setManualPlayback({})
+  }
+
   const getWindowPosition = (id, fallback = { x: 0, y: 0 }) => windowPositions[id] ?? fallback
+  const normalizedProjectSearch = projectSearch.trim().toLowerCase()
+  const visibleProjects = projectFiles.filter((project) => {
+    if (!normalizedProjectSearch) return true
+    return [
+      project.name,
+      project.folder,
+      project.role,
+      project.summary,
+      ...project.folders.map((folder) => folder.name),
+    ].join(' ').toLowerCase().includes(normalizedProjectSearch)
+  })
+  const hoveredProject = projectFiles.find((project) => project.id === hoveredProjectId)
+  const spotlightProject = hoveredProject ?? visibleProjects[0] ?? projectFiles[0]
+  const totalVideoCount = projectFiles.reduce((count, project) => count + project.videos.length + project.folders.reduce((folderCount, folder) => folderCount + folder.videos.length, 0), 0)
+  const totalImageCount = projectFiles.reduce((count, project) => count + project.images.length, 0)
+  const recentProjects = recentProjectIds
+    .map((id) => projectFiles.find((project) => project.id === id))
+    .filter(Boolean)
+  const desktopDateLabel = desktopNow.toLocaleDateString('fr-FR', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  })
+  const desktopTimeLabel = desktopNow.toLocaleTimeString('fr-FR', {
+    hour: '2-digit',
+    minute: '2-digit',
+  })
 
   const moveInfoSlide = (id, direction) => {
     const project = projectFiles.find((item) => item.id === id)
@@ -366,7 +428,7 @@ function ProjectDesktop() {
           <span>⌁</span>
           <span>⌕</span>
           <span>▰</span>
-          <time>Ven. 12 juin&nbsp;&nbsp;20:19</time>
+          <time>{desktopDateLabel}&nbsp;&nbsp;{desktopTimeLabel}</time>
         </div>
       </header>
 
@@ -375,15 +437,36 @@ function ProjectDesktop() {
         <em>Kawtar&apos;s desktop</em>
       </div>
 
+      <label className="desktop-spotlight">
+        <span aria-hidden="true">⌕</span>
+        <input
+          type="search"
+          value={projectSearch}
+          onChange={(event) => setProjectSearch(event.target.value)}
+          placeholder="Rechercher un projet..."
+          aria-label="Rechercher un projet"
+        />
+        <small>{visibleProjects.length}/{projectFiles.length}</small>
+      </label>
+
       <div className="desktop-folders">
-        {projectFiles.map((item, index) => (
+        {projectFiles.map((item, index) => {
+          const isVisible = visibleProjects.some((project) => project.id === item.id)
+
+          return (
           <button
-            className={`desktop-folder folder-${index + 1}${openFolders.includes(item.id) ? ' is-selected' : ''}`}
+            className={`desktop-folder folder-${index + 1} project-folder-${item.id}${openFolders.includes(item.id) ? ' is-selected' : ''}${isVisible ? '' : ' is-filtered-out'}`}
             type="button"
             key={item.id}
             onDoubleClick={() => openProject(item.id)}
             onClick={() => openProject(item.id)}
+            onPointerEnter={() => setHoveredProjectId(item.id)}
+            onPointerLeave={() => setHoveredProjectId((current) => (current === item.id ? null : current))}
+            onFocus={() => setHoveredProjectId(item.id)}
+            onBlur={() => setHoveredProjectId((current) => (current === item.id ? null : current))}
             style={{ '--folder-color': item.color, '--folder-accent': item.accent }}
+            aria-hidden={!isVisible}
+            tabIndex={isVisible ? 0 : -1}
           >
             <span className="folder-icon" aria-hidden="true">
               {item.logo ? <img src={item.logo} alt="" /> : <strong>{item.logoText ?? item.name.slice(0, 2)}</strong>}
@@ -391,8 +474,46 @@ function ProjectDesktop() {
             </span>
             <span>{item.folder}</span>
           </button>
-        ))}
+          )
+        })}
       </div>
+
+      <aside className={`desktop-project-peek${hoveredProject ? ' is-visible' : ''}`} style={{ '--project-color': spotlightProject.color }}>
+        <span>Focus</span>
+        <strong>{spotlightProject.name}</strong>
+        <p>{spotlightProject.summary}</p>
+        <div>
+          <small>{spotlightProject.videos.length} previews</small>
+          <small>{spotlightProject.folders.length} dossiers</small>
+          <small>{spotlightProject.images.length} images</small>
+        </div>
+      </aside>
+
+      <aside className="desktop-activity-widget">
+        <span>Studio</span>
+        <strong>{projectFiles.length} projets</strong>
+        <p>{totalVideoCount} vidéos · {totalImageCount} images</p>
+        <meter min="0" max="100" value="74">74%</meter>
+      </aside>
+
+      {recentProjects.length ? (
+        <aside className="desktop-recent-widget" aria-label="Projets récents">
+          <span>Recent</span>
+          <div>
+            {recentProjects.map((project) => (
+              <button
+                type="button"
+                key={`recent-${project.id}`}
+                onClick={() => openProjectCase(project.id)}
+                style={{ '--project-color': project.color }}
+              >
+                <i aria-hidden="true" />
+                <b>{project.name}</b>
+              </button>
+            ))}
+          </div>
+        </aside>
+      ) : null}
 
       <aside className="desktop-sticky-note" aria-label="Note de Kawtar">
         <header>
@@ -404,7 +525,14 @@ function ProjectDesktop() {
         <small>— Kawtar</small>
       </aside>
 
-      <button className="desktop-cv-file" type="button" onClick={() => setCvOpen(true)}>
+      <button
+        className="desktop-cv-file"
+        type="button"
+        onClick={() => {
+          setWindowPositions((current) => ({ ...current, cv: { x: 0, y: 0 } }))
+          setCvOpen(true)
+        }}
+      >
         <span className="cv-paper" aria-hidden="true">
           <i>PDF</i>
           <b>KS</b>
@@ -415,7 +543,14 @@ function ProjectDesktop() {
         <span>KAWTAR_CV.pdf</span>
       </button>
 
-      <button className="desktop-letter-file" type="button" onClick={() => setLetterOpen(true)}>
+      <button
+        className="desktop-letter-file"
+        type="button"
+        onClick={() => {
+          setWindowPositions((current) => ({ ...current, letter: { x: 0, y: 0 } }))
+          setLetterOpen(true)
+        }}
+      >
         <span className="cv-paper letter-paper" aria-hidden="true">
           <i>PDF</i>
           <b>LM</b>
@@ -499,8 +634,8 @@ function ProjectDesktop() {
             style={{
               '--window-x': `${folderPosition.x}px`,
               '--window-y': `${folderPosition.y}px`,
-              left: `calc(50% + ${(windowIndex - 1) * 56}px)`,
-              top: `${17 + windowIndex * 3}%`,
+              left: '50%',
+              top: '50%',
               zIndex: 20 + windowIndex,
             }}
           >
@@ -579,9 +714,9 @@ function ProjectDesktop() {
               '--project-color': project.color,
               '--window-x': `${mediaPosition.x}px`,
               '--window-y': `${mediaPosition.y}px`,
-              left: `calc(50% + ${(windowIndex - 1) * 44}px)`,
-              top: `${21 + windowIndex * 3}%`,
-              zIndex: 24 + windowIndex,
+              left: '50%',
+              top: '50%',
+              zIndex: 70 + windowIndex,
             }}
           >
             <div className="window-bar" onPointerDown={(event) => startMoving(event, `media-${entry.key}`)}>
@@ -642,8 +777,8 @@ function ProjectDesktop() {
         const isPlaying = videoPlaybackState[projectId] ?? true
         const volume = videoVolumes[projectId] ?? 1
         const position = getWindowPosition(`case-${projectId}`, {
-          x: (projectFiles.findIndex((item) => item.id === projectId) - 1) * 46,
-          y: projectFiles.findIndex((item) => item.id === projectId) * 28,
+          x: 0,
+          y: 0,
         })
         const activeImagePreview = imagePreview?.projectId === projectId
           ? imagePreview
@@ -722,15 +857,12 @@ function ProjectDesktop() {
                   </>
                 ) : project.id === 'dystinct-agency' ? (
                   <>
-                    <div className="experience-brand dystinct-brand" aria-hidden="true">DYST</div>
+                    <div className="experience-brand dystinct-brand" aria-hidden="true">Dystinct Agency</div>
                     <section className="experience-info-text">
                       <h4>EXPÉRIENCE</h4>
                       <p>Mon expérience chez Dystinct Agency a marqué un véritable tournant dans mon parcours. En intégrant cette agence de communication parisienne, j’ai eu l’opportunité de collaborer avec des marques issues de secteurs très variés, tout en développant une véritable expertise dans l’univers de la food, un domaine qui me passionne particulièrement. Cette immersion m’a permis de gagner en rigueur, en professionnalisme et en polyvalence, en apprenant à concevoir des stratégies de communication, créer du contenu à forte valeur ajoutée et répondre aux attentes de clients aux univers très différents. Une expérience aussi enrichissante qu’exigeante, qui a renforcé ma vision de la communication et confirmé mon envie d’en faire bien plus qu’un métier.</p>
                     </section>
                     <p className="case-study-period">{project.period}</p>
-                    <div className="case-study-services">
-                      {project.services.map((service) => <span key={service}>{service}</span>)}
-                    </div>
                   </>
                 ) : project.id === 'trio-promo' ? (
                   <>
@@ -740,9 +872,6 @@ function ProjectDesktop() {
                       <p>Mon expérience chez Trio Promo a été un véritable défi… et sans doute l’une de celles qui m’ont le plus fait évoluer. En rejoignant ce magasin de déstockage alimentaire, je suis sortie de ma zone de confort : je devais m’adresser à une cible bien plus âgée, sur une communication principalement orientée vers Facebook, un univers très différent de celui auquel j’étais habituée. Plutôt que de reproduire ce qui existait déjà, j’ai choisi d’y apporter ma vision en développant un contenu plus moderne, plus dynamique et plus engageant. Petit à petit, une clientèle plus jeune, qui ne s’intéressait pas naturellement à ce type d’enseigne, a commencé à découvrir le magasin à travers mes contenus. Cette expérience m’a appris à adapter ma créativité à des contraintes très différentes, à construire une stratégie adaptée au terrain et à sortir de mes automatismes. J’en ressors avec une plus grande capacité d’adaptation et surtout une meilleure compréhension des enjeux de communication locale.</p>
                     </section>
                     <p className="case-study-period">{project.period}</p>
-                    <div className="case-study-services">
-                      {project.services.map((service) => <span key={service}>{service}</span>)}
-                    </div>
                   </>
                 ) : (
                   <>
@@ -906,6 +1035,27 @@ function ProjectDesktop() {
                   </button>
                 ))}
               </div>
+              {project.folders.length ? (
+                <div className="project-folder-access" aria-label={`Dossiers disponibles pour ${project.name}`}>
+                  <div className="project-folder-access-header">
+                    <span>Dossiers</span>
+                    <small>{String(project.folders.length).padStart(2, '0')}</small>
+                  </div>
+                  <div className="project-folder-buttons">
+                    {project.folders.map((folder) => (
+                      <button
+                        type="button"
+                        key={`${project.id}-case-${folder.slug}`}
+                        className="project-folder-access-button"
+                        onClick={() => (folder.videos.length ? openMediaFolder(project.id, folder.slug) : openProject(project.id))}
+                      >
+                        <span className="case-folder-icon" aria-hidden="true" />
+                        <small>{folder.name}</small>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
@@ -964,7 +1114,7 @@ function ProjectDesktop() {
         <span className="dock-tiktok">Tk</span>
         <span className="dock-instagram">◎</span>
         <i />
-        <span className="dock-trash">⌫</span>
+        <button type="button" className="dock-trash" onClick={closeAllWindows} aria-label="Tout fermer">⌫</button>
       </div>
     </section>
   )
@@ -1459,14 +1609,28 @@ export default function App() {
           </div>
         </div>
 
-        <div className="education-bonuses" aria-label="Stages internationaux">
+        <div className="education-bonuses" aria-label="Bons d'achat des stages internationaux">
           <article className="education-bonus education-bonus-maroc">
-            <strong>Stage Maroc</strong>
-            <span>Bon d&apos;achat</span>
+            <span className="bonus-ribbon" aria-hidden="true">
+              <i />
+            </span>
+            <div>
+              <strong>Stage Maroc</strong>
+              <em>Bon d&apos;achat</em>
+              <small>Casablanca · 2024</small>
+            </div>
+            <span className="bonus-barcode" aria-hidden="true" />
           </article>
           <article className="education-bonus education-bonus-dubai">
-            <strong>Stage Dubaï</strong>
-            <span>Bon d&apos;achat</span>
+            <span className="bonus-ribbon" aria-hidden="true">
+              <i />
+            </span>
+            <div>
+              <strong>Stage Dubaï</strong>
+              <em>Bon d&apos;achat</em>
+              <small>Dubaï · 2025</small>
+            </div>
+            <span className="bonus-barcode" aria-hidden="true" />
           </article>
         </div>
       </section>
