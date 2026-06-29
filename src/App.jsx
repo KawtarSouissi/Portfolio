@@ -38,30 +38,6 @@ const makeMediaFolder = (name, slug, folder, videoCount) => ({
 
 const projectFiles = [
   {
-    id: 'ks-modesty',
-    name: 'KS MODESTY',
-    folder: 'KS_MODESTY',
-    color: '#9f1734',
-    accent: '#f1b6c5',
-    role: 'Projet de marque',
-    summary: 'Direction créative, contenu et identité digitale.',
-    period: 'Projet personnel · Mode',
-    mission: 'Créer un univers cohérent autour de la modest fashion et produire des contenus capables de présenter les collections avec une identité forte.',
-    services: ['Direction créative', 'Création de contenu', 'Social media', 'Campagnes vidéo'],
-    logo: asset('/projects/KSMODESTY/KS_logo.png'),
-    social: {
-      instagram: 'https://www.instagram.com/ksmodesty/',
-      tiktok: 'https://www.tiktok.com/@ksmodesty',
-      handle: '@ksmodesty',
-    },
-    folders: [
-      makeMediaFolder('Promotionnel', 'ks-modesty', 'promotionnel', 5),
-      makeMediaFolder('Trendy', 'ks-modesty', 'trendy', 5),
-      makeMediaFolder('Vlog', 'ks-modesty', 'vlog', 2),
-    ],
-    ...makeLegacyProjectMedia('ks-modesty', 15, 4),
-  },
-  {
     id: 'naklo-b3da',
     name: 'NAKLO B3DA',
     folder: 'NAKLO_B3DA',
@@ -109,6 +85,30 @@ const projectFiles = [
     ],
     images: makeProjectImages('RIWAYA', 13),
     videos: makeProjectVideos('RIWAYA', 'carousel', 9),
+  },
+  {
+    id: 'ks-modesty',
+    name: 'KS MODESTY',
+    folder: 'KS_MODESTY',
+    color: '#9f1734',
+    accent: '#f1b6c5',
+    role: 'Projet de marque',
+    summary: 'Direction créative, contenu et identité digitale.',
+    period: 'Projet personnel · Mode',
+    mission: 'Créer un univers cohérent autour de la modest fashion et produire des contenus capables de présenter les collections avec une identité forte.',
+    services: ['Direction créative', 'Création de contenu', 'Social media', 'Campagnes vidéo'],
+    logo: asset('/projects/KSMODESTY/KS_logo.png'),
+    social: {
+      instagram: 'https://www.instagram.com/ksmodesty/',
+      tiktok: 'https://www.tiktok.com/@ksmodesty',
+      handle: '@ksmodesty',
+    },
+    folders: [
+      makeMediaFolder('Promotionnel', 'ks-modesty', 'promotionnel', 5),
+      makeMediaFolder('Trendy', 'ks-modesty', 'trendy', 5),
+      makeMediaFolder('Vlog', 'ks-modesty', 'vlog', 2),
+    ],
+    ...makeLegacyProjectMedia('ks-modesty', 15, 4),
   },
   {
     id: 'dystinct-agency',
@@ -1228,7 +1228,7 @@ function VideoRail() {
   const railVideos = [...videos, ...videos]
 
   useEffect(() => {
-    videoRefs.current.slice(0, 3).forEach((video) => {
+    videoRefs.current.slice(0, 5).forEach((video) => {
       if (!video) return
       video.play().catch(() => {})
     })
@@ -1241,12 +1241,15 @@ function VideoRail() {
           <article className="video-card" key={`${video.src}-${index}`}>
             <video
               ref={(element) => { videoRefs.current[index] = element }}
-              autoPlay={index < 3}
+              autoPlay={index < 5}
               loop
               muted
               playsInline
-              preload={index < 3 ? 'metadata' : 'none'}
+              preload={index < 5 ? 'auto' : 'none'}
               poster={asset("/hero.png")}
+              onCanPlay={(event) => {
+                if (index < 5) event.currentTarget.play().catch(() => {})
+              }}
               onLoadedMetadata={(event) => {
                 if (!video.src.endsWith('video-05-web.mp4')) return
                 event.currentTarget.currentTime = 65
@@ -1295,7 +1298,7 @@ export default function App() {
       ...project.videos.map((video) => video.poster),
       ...project.folders.flatMap((folder) => folder.videos.map((video) => video.poster)),
     ])
-    const assetsToWarm = [...staticAssetsToPreload, asset('/hero.png'), ...projectAssets]
+    const assetsToWarm = [...staticAssetsToPreload, asset('/hero.png'), ...videos.map((video) => video.src), ...projectAssets]
     const warmed = new Set()
 
     assetsToWarm.forEach((url) => {
@@ -1631,29 +1634,60 @@ export default function App() {
           </div>
         </div>
 
-        <div className="education-bonuses" aria-label="Bons d'achat des stages internationaux">
-          <article className="education-bonus education-bonus-maroc">
-            <span className="bonus-ribbon" aria-hidden="true">
-              <i />
-            </span>
-            <div>
-              <strong>Stage Maroc</strong>
-              <em>Bon d&apos;achat</em>
-              <small>Casablanca · 2024</small>
+        <div className={`bonus-printer${ticketPrinted ? ' is-printing' : ''}`} aria-label="Imprimante des bons d'achat">
+          <div className="bonus-printer-stage">
+            <img
+              className="bonus-printer-layer bonus-printer-bottom"
+              src={asset('/3D_glb_optimized/bas_bouche.png')}
+              alt=""
+              aria-hidden="true"
+              decoding="async"
+            />
+            <div className="education-bonuses" aria-hidden={!ticketPrinted}>
+              <article className="education-bonus education-bonus-maroc">
+                <span className="bonus-receipt-hole" aria-hidden="true" />
+                <span className="bonus-ticket-label">Comm Digitale</span>
+                <img
+                  className="bonus-landmark bonus-landmark-palm"
+                  src={asset('/education/palmier-silhouette.png')}
+                  alt=""
+                  aria-hidden="true"
+                  decoding="async"
+                />
+                <div className="bonus-stage-copy">
+                  <strong>Agence d&apos;événementiel</strong>
+                  <span>Agadir, MAROC</span>
+                  <em>Bon d&apos;achat</em>
+                </div>
+                <span className="bonus-barcode" aria-hidden="true" />
+              </article>
+              <article className="education-bonus education-bonus-dubai">
+                <span className="bonus-receipt-hole" aria-hidden="true" />
+                <span className="bonus-ticket-label">Marketing</span>
+                <img
+                  className="bonus-landmark bonus-landmark-burj"
+                  src={asset('/education/burj-khalifa-silhouette.png')}
+                  alt=""
+                  aria-hidden="true"
+                  decoding="async"
+                />
+                <div className="bonus-stage-copy">
+                  <strong>Entreprise placage de bois</strong>
+                  <span>Dubaï, UAE</span>
+                  <em>Bon d&apos;achat</em>
+                </div>
+                <span className="bonus-barcode" aria-hidden="true" />
+              </article>
             </div>
-            <span className="bonus-barcode" aria-hidden="true" />
-          </article>
-          <article className="education-bonus education-bonus-dubai">
-            <span className="bonus-ribbon" aria-hidden="true">
-              <i />
-            </span>
-            <div>
-              <strong>Stage Dubaï</strong>
-              <em>Bon d&apos;achat</em>
-              <small>Dubaï · 2025</small>
-            </div>
-            <span className="bonus-barcode" aria-hidden="true" />
-          </article>
+            <img
+              className="bonus-printer-layer bonus-printer-top"
+              src={asset('/3D_glb_optimized/haut_bouche.png')}
+              alt=""
+              aria-hidden="true"
+              decoding="async"
+            />
+            <span className="bonus-ticket-mask" aria-hidden="true" />
+          </div>
         </div>
       </section>
 
@@ -1706,7 +1740,8 @@ export default function App() {
                     </svg>
                     <span>LinkedIn</span>
                   </a>
-                  <a className="contact-phone" href="tel:+33000000000">+33 0 00 00 00 00</a>
+                  <a className="contact-phone" href="tel:+33652673388">+33 6 52 67 33 88</a>
+                  <a className="contact-email" href="mailto:kawtarsouissi@hotmail.com">kawtarsouissi@hotmail.com</a>
                 </div>
               </div>
 

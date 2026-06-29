@@ -122,7 +122,7 @@ function Emerald({ mobile }) {
   const { size } = useThree()
   const emerald = useMemo(() => normalizedClone(scene, 1.65), [scene])
 
-  const desktopX = THREE.MathUtils.clamp(4.9 + ((size.width / Math.max(size.height, 1)) - 1.48) * 1.05, 4.5, 5.95)
+  const desktopX = THREE.MathUtils.clamp(5.25 + ((size.width / Math.max(size.height, 1)) - 1.48) * 1.05, 4.85, 6.3)
   const desktopY = THREE.MathUtils.clamp(4.96 + ((size.height / Math.max(size.width, 1)) - .62) * .55, 4.7, 5.25)
 
   useFrame(({ clock }, delta) => {
@@ -133,7 +133,7 @@ function Emerald({ mobile }) {
   })
 
   return (
-    <group ref={group} position={[mobile ? 1.35 : desktopX, mobile ? 3.55 : desktopY, .2]}>
+    <group ref={group} position={[mobile ? 1.65 : desktopX, mobile ? 3.55 : desktopY, .2]}>
       <primitive object={emerald} />
     </group>
   )
