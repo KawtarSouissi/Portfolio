@@ -3008,8 +3008,8 @@ a {
 
 .case-study-window:has(.project-story-dystinct-agency) {
   background:
-    linear-gradient(135deg, rgba(235, 236, 236, .98), rgba(165, 169, 170, .94)),
-    radial-gradient(circle at 12% 12%, rgba(255, 255, 255, .55), transparent 42%);
+    linear-gradient(135deg, rgba(26, 150, 167, 0.98), rgba(13, 79, 117, 0.94)),
+    radial-gradient(circle at 12% 12%, rgba(30, 98, 201, 0.55), transparent 42%);
   color: #151719;
 }
 
@@ -3021,12 +3021,12 @@ a {
 }
 
 .case-study-window:has(.project-story-dystinct-agency) .experience-info-text h4 {
-  color: #101315;
+  color: #ffffff;
 }
 
 .case-study-window:has(.project-story-trio-promo) {
   background:
-    linear-gradient(135deg, rgba(154, 31, 45, .98), rgba(212, 75, 87, .94) 48%, rgba(124, 24, 38, .96));
+    linear-gradient(135deg, rgba(165, 33, 49, 0.98), rgba(212, 75, 87, .94) 48%, rgba(124, 24, 38, .96));
   color: #fff5f5;
 }
 
