@@ -1264,6 +1264,33 @@ function VideoRail() {
   )
 }
 
+function useIsMobileLayout() {
+  const [isMobileLayout, setIsMobileLayout] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return window.matchMedia('(max-width: 760px)').matches
+  })
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 760px)')
+
+    const handleChange = (event) => {
+      setIsMobileLayout(event.matches)
+    }
+
+    setIsMobileLayout(mediaQuery.matches)
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange)
+      return () => mediaQuery.removeEventListener('change', handleChange)
+    }
+
+    mediaQuery.addListener(handleChange)
+    return () => mediaQuery.removeListener(handleChange)
+  }, [])
+
+  return isMobileLayout
+}
+
 export default function App() {
   const heroRef = useRef(null)
   const headingRef = useRef(null)
@@ -1289,6 +1316,7 @@ export default function App() {
     email: '',
     message: '',
   })
+  const isMobileLayout = useIsMobileLayout()
   const activeTrait = personalityTraits.find((trait) => trait.id === selectedTrait) ?? defaultAboutSummary
 
   useEffect(() => {
@@ -1483,8 +1511,8 @@ export default function App() {
           <nav aria-label="Navigation principale">
             <a href="#work">Work</a>
             <a href="#projects">Projects</a>
-            <a href="#about">About</a>
-            <a href="#education">Education</a>
+            {isMobileLayout ? null : <a href="#about">About</a>}
+            {isMobileLayout ? null : <a href="#education">Education</a>}
             <a href="#contact">Contact</a>
           </nav>
         </header>
@@ -1510,186 +1538,190 @@ export default function App() {
         </div>
       </section>
 
-      <section className="about-me-section" id="about" ref={aboutRef}>
-        <div className="about-title">
-          <strong>ABOUT</strong>
-          <em>Meeee</em>
-        </div>
-
-        <article className="trait-description" key={activeTrait.id} aria-live="polite">
-          {selectedTrait ? <h3>{activeTrait.label}</h3> : null}
-          <p>{activeTrait.description}</p>
-        </article>
-
-        <div className="about-character" aria-hidden="true">
-          <img src={asset('/3D_glb_optimized/kaw.png')} alt="" loading="lazy" decoding="async" />
-        </div>
-
-        <div className="trait-list" aria-label="Les qualités de Kawtar">
-          {personalityTraits.map((trait) => (
-            <button
-              className={`trait-pill trait-pill-${trait.id}${selectedTrait === trait.id ? ' is-active' : ''}`}
-              type="button"
-              key={trait.id}
-              aria-label={trait.label}
-              aria-pressed={selectedTrait === trait.id}
-              onClick={() => setSelectedTrait((current) => (current === trait.id ? null : trait.id))}
-              onPointerEnter={() => setHoveredTrait(trait.id)}
-              onPointerLeave={() => setHoveredTrait(null)}
-            />
-          ))}
-        </div>
-
-        {loadSimsScene ? (
-          <Suspense fallback={null}>
-            <SimsAboutScene
-              active={aboutVisible}
-              selected={hoveredTrait || selectedTrait}
-              onSelect={setSelectedTrait}
-            />
-          </Suspense>
-        ) : null}
-      </section>
-
-      <section className="bag-section" id="work" ref={bagRef}>
-        <div className="bag-title">
-          <strong>WHAT&apos;S IN</strong>
-          <em>My bag</em>
-        </div>
-
-        <div className="bag-labels" aria-label="Matériel de Kawtar">
-          {aboutLabels.map((label) => (
-            <button
-              className={`bag-label bag-label-${label.id}${selectedObject === label.id ? ' is-active' : ''}`}
-              type="button"
-              key={label.id}
-              onClick={() => setSelectedObject(label.id)}
-            >
-              <strong>{label.title}</strong>
-              <em>{label.subtitle}</em>
-              <small>{label.date}</small>
-            </button>
-          ))}
-        </div>
-
-        {loadBagScene ? (
-          <Suspense fallback={null}>
-            <AboutScene active={bagVisible} selected={selectedObject} onSelect={setSelectedObject} />
-          </Suspense>
-        ) : null}
-      </section>
-
-      <section className="education-section" id="education" ref={educationRef}>
-        <div className="education-heading education-heading-tea">
-          <strong>GURL LET ME SPILL</strong>
-          <em>My teaaaaa</em>
-        </div>
-
-        <div className="education-heading education-heading-academic">
-          <strong>Mon parcours académique ?</strong>
-          <em>Lemme show you the receipt...</em>
-        </div>
-
-        <div className="tea-backdrop" aria-hidden="true" />
-        {loadEducationScene ? (
-          <Suspense fallback={null}>
-            <EducationTeaScene active={educationVisible} />
-          </Suspense>
-        ) : null}
-
-        <div className={`receipt-printer${ticketPrinted ? ' is-printing' : ''}`}>
-          <div className="printer-stage">
-            <img
-              className="printer-layer printer-layer-bottom"
-              src={asset('/3D_glb_optimized/bas_bouche.png')}
-              alt=""
-              aria-hidden="true"
-              decoding="async"
-            />
-            <img
-              className="printer-layer printer-ticket"
-              id="education-ticket"
-              src={asset('/3D_glb_optimized/ticket.png')}
-              alt="Ticket présentant le parcours académique de Kawtar"
-              aria-hidden={!ticketPrinted}
-              decoding="async"
-            />
-            <img
-              className="printer-layer printer-layer-top"
-              src={asset('/3D_glb_optimized/haut_bouche.png')}
-              alt=""
-              aria-hidden="true"
-              decoding="async"
-            />
-            <span className="printer-ticket-mask" aria-hidden="true" />
-            <button
-              className="printer-button"
-              type="button"
-              aria-controls="education-ticket"
-              aria-expanded={ticketPrinted}
-              onClick={() => setTicketPrinted((printed) => !printed)}
-            >
-              {ticketPrinted ? 'Ranger mon ticket' : 'Imprimer mon ticket'}
-            </button>
-          </div>
-        </div>
-
-        <div className={`bonus-printer${ticketPrinted ? ' is-printing' : ''}`} aria-label="Imprimante des bons d'achat">
-          <div className="bonus-printer-stage">
-            <img
-              className="bonus-printer-layer bonus-printer-bottom"
-              src={asset('/3D_glb_optimized/bas_bouche.png')}
-              alt=""
-              aria-hidden="true"
-              decoding="async"
-            />
-            <div className="education-bonuses" aria-hidden={!ticketPrinted}>
-              <article className="education-bonus education-bonus-maroc">
-                <span className="bonus-receipt-hole" aria-hidden="true" />
-                <span className="bonus-ticket-label">Comm Digitale</span>
-                <img
-                  className="bonus-landmark bonus-landmark-palm"
-                  src={asset('/education/palmier-silhouette.png')}
-                  alt=""
-                  aria-hidden="true"
-                  decoding="async"
-                />
-                <div className="bonus-stage-copy">
-                  <strong>Agence d&apos;événementiel</strong>
-                  <span>Agadir, MAROC</span>
-                  <em>Bon d&apos;achat</em>
-                </div>
-                <span className="bonus-barcode" aria-hidden="true" />
-              </article>
-              <article className="education-bonus education-bonus-dubai">
-                <span className="bonus-receipt-hole" aria-hidden="true" />
-                <span className="bonus-ticket-label">Marketing</span>
-                <img
-                  className="bonus-landmark bonus-landmark-burj"
-                  src={asset('/education/burj-khalifa-silhouette.png')}
-                  alt=""
-                  aria-hidden="true"
-                  decoding="async"
-                />
-                <div className="bonus-stage-copy">
-                  <strong>Entreprise placage de bois</strong>
-                  <span>Dubaï, UAE</span>
-                  <em>Bon d&apos;achat</em>
-                </div>
-                <span className="bonus-barcode" aria-hidden="true" />
-              </article>
+      {isMobileLayout ? null : (
+        <>
+          <section className="about-me-section" id="about" ref={aboutRef}>
+            <div className="about-title">
+              <strong>ABOUT</strong>
+              <em>Meeee</em>
             </div>
-            <img
-              className="bonus-printer-layer bonus-printer-top"
-              src={asset('/3D_glb_optimized/haut_bouche.png')}
-              alt=""
-              aria-hidden="true"
-              decoding="async"
-            />
-            <span className="bonus-ticket-mask" aria-hidden="true" />
-          </div>
-        </div>
-      </section>
+
+            <article className="trait-description" key={activeTrait.id} aria-live="polite">
+              {selectedTrait ? <h3>{activeTrait.label}</h3> : null}
+              <p>{activeTrait.description}</p>
+            </article>
+
+            <div className="about-character" aria-hidden="true">
+              <img src={asset('/3D_glb_optimized/kaw.png')} alt="" loading="lazy" decoding="async" />
+            </div>
+
+            <div className="trait-list" aria-label="Les qualités de Kawtar">
+              {personalityTraits.map((trait) => (
+                <button
+                  className={`trait-pill trait-pill-${trait.id}${selectedTrait === trait.id ? ' is-active' : ''}`}
+                  type="button"
+                  key={trait.id}
+                  aria-label={trait.label}
+                  aria-pressed={selectedTrait === trait.id}
+                  onClick={() => setSelectedTrait((current) => (current === trait.id ? null : trait.id))}
+                  onPointerEnter={() => setHoveredTrait(trait.id)}
+                  onPointerLeave={() => setHoveredTrait(null)}
+                />
+              ))}
+            </div>
+
+            {loadSimsScene ? (
+              <Suspense fallback={null}>
+                <SimsAboutScene
+                  active={aboutVisible}
+                  selected={hoveredTrait || selectedTrait}
+                  onSelect={setSelectedTrait}
+                />
+              </Suspense>
+            ) : null}
+          </section>
+
+          <section className="bag-section" id="work" ref={bagRef}>
+            <div className="bag-title">
+              <strong>WHAT&apos;S IN</strong>
+              <em>My bag</em>
+            </div>
+
+            <div className="bag-labels" aria-label="Matériel de Kawtar">
+              {aboutLabels.map((label) => (
+                <button
+                  className={`bag-label bag-label-${label.id}${selectedObject === label.id ? ' is-active' : ''}`}
+                  type="button"
+                  key={label.id}
+                  onClick={() => setSelectedObject(label.id)}
+                >
+                  <strong>{label.title}</strong>
+                  <em>{label.subtitle}</em>
+                  <small>{label.date}</small>
+                </button>
+              ))}
+            </div>
+
+            {loadBagScene ? (
+              <Suspense fallback={null}>
+                <AboutScene active={bagVisible} selected={selectedObject} onSelect={setSelectedObject} />
+              </Suspense>
+            ) : null}
+          </section>
+
+          <section className="education-section" id="education" ref={educationRef}>
+            <div className="education-heading education-heading-tea">
+              <strong>GURL LET ME SPILL</strong>
+              <em>My teaaaaa</em>
+            </div>
+
+            <div className="education-heading education-heading-academic">
+              <strong>Mon parcours académique ?</strong>
+              <em>Lemme show you the receipt...</em>
+            </div>
+
+            <div className="tea-backdrop" aria-hidden="true" />
+            {loadEducationScene ? (
+              <Suspense fallback={null}>
+                <EducationTeaScene active={educationVisible} />
+              </Suspense>
+            ) : null}
+
+            <div className={`receipt-printer${ticketPrinted ? ' is-printing' : ''}`}>
+              <div className="printer-stage">
+                <img
+                  className="printer-layer printer-layer-bottom"
+                  src={asset('/3D_glb_optimized/bas_bouche.png')}
+                  alt=""
+                  aria-hidden="true"
+                  decoding="async"
+                />
+                <img
+                  className="printer-layer printer-ticket"
+                  id="education-ticket"
+                  src={asset('/3D_glb_optimized/ticket.png')}
+                  alt="Ticket présentant le parcours académique de Kawtar"
+                  aria-hidden={!ticketPrinted}
+                  decoding="async"
+                />
+                <img
+                  className="printer-layer printer-layer-top"
+                  src={asset('/3D_glb_optimized/haut_bouche.png')}
+                  alt=""
+                  aria-hidden="true"
+                  decoding="async"
+                />
+                <span className="printer-ticket-mask" aria-hidden="true" />
+                <button
+                  className="printer-button"
+                  type="button"
+                  aria-controls="education-ticket"
+                  aria-expanded={ticketPrinted}
+                  onClick={() => setTicketPrinted((printed) => !printed)}
+                >
+                  {ticketPrinted ? 'Ranger mon ticket' : 'Imprimer mon ticket'}
+                </button>
+              </div>
+            </div>
+
+            <div className={`bonus-printer${ticketPrinted ? ' is-printing' : ''}`} aria-label="Imprimante des bons d'achat">
+              <div className="bonus-printer-stage">
+                <img
+                  className="bonus-printer-layer bonus-printer-bottom"
+                  src={asset('/3D_glb_optimized/bas_bouche.png')}
+                  alt=""
+                  aria-hidden="true"
+                  decoding="async"
+                />
+                <div className="education-bonuses" aria-hidden={!ticketPrinted}>
+                  <article className="education-bonus education-bonus-maroc">
+                    <span className="bonus-receipt-hole" aria-hidden="true" />
+                    <span className="bonus-ticket-label">Comm Digitale</span>
+                    <img
+                      className="bonus-landmark bonus-landmark-palm"
+                      src={asset('/education/palmier-silhouette.png')}
+                      alt=""
+                      aria-hidden="true"
+                      decoding="async"
+                    />
+                    <div className="bonus-stage-copy">
+                      <strong>Agence d&apos;événementiel</strong>
+                      <span>Agadir, MAROC</span>
+                      <em>Bon d&apos;achat</em>
+                    </div>
+                    <span className="bonus-barcode" aria-hidden="true" />
+                  </article>
+                  <article className="education-bonus education-bonus-dubai">
+                    <span className="bonus-receipt-hole" aria-hidden="true" />
+                    <span className="bonus-ticket-label">Marketing</span>
+                    <img
+                      className="bonus-landmark bonus-landmark-burj"
+                      src={asset('/education/burj-khalifa-silhouette.png')}
+                      alt=""
+                      aria-hidden="true"
+                      decoding="async"
+                    />
+                    <div className="bonus-stage-copy">
+                      <strong>Entreprise placage de bois</strong>
+                      <span>Dubaï, UAE</span>
+                      <em>Bon d&apos;achat</em>
+                    </div>
+                    <span className="bonus-barcode" aria-hidden="true" />
+                  </article>
+                </div>
+                <img
+                  className="bonus-printer-layer bonus-printer-top"
+                  src={asset('/3D_glb_optimized/haut_bouche.png')}
+                  alt=""
+                  aria-hidden="true"
+                  decoding="async"
+                />
+                <span className="bonus-ticket-mask" aria-hidden="true" />
+              </div>
+            </div>
+          </section>
+        </>
+      )}
 
       <ProjectDesktop />
 
